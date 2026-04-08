@@ -1,0 +1,10 @@
+{
+	"name": "crocodevs/croco-blocks",
+	"description": "Croco Blocks – custom Gutenberg blocks for WordPress",
+	"type": "wordpress-plugin",
+	"autoload": {
+		"psr-4": {
+			"CrocoBlocks\\": "src/"
+		}
+	}
+}

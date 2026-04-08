@@ -1,0 +1,124 @@
+.cb-responsive-unit-control {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-top: 0.25rem;
+	margin-bottom: 10px;
+}
+
+.cb-responsive-unit-control__label {
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 5px;
+}
+
+.cb-responsive-unit-control__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.cb-responsive-unit-control__devices {
+	flex: 0 0 auto;
+	display: inline-flex;
+	gap: 2px;
+
+	.components-button {
+		min-width: 26px;
+		padding-inline: 4px;
+		height: 28px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: none;
+	}
+}
+
+.cb-responsive-unit-control__input-wrapper {
+	flex: 1 1 auto;
+	display: flex;
+	align-items: center;
+	position: relative;
+	height: 34px;
+	padding: 5px 8px;
+	border: 1px solid #757575;
+	border-radius: 2px;
+	background: #fff;
+}
+
+.cb-responsive-unit-control__input {
+	flex: 1 1 auto;
+	margin: 0;
+}
+
+.cb-responsive-unit-control__input .components-base-control__field {
+	height: 100%;
+}
+
+.cb-responsive-unit-control__input input.components-text-control__input {
+	min-width: 72px;
+	height: 100%;
+	padding: 5px 5px 5px 5px;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+	background: transparent;
+
+	&:focus {
+		border: none;
+		box-shadow: none;
+		outline: none;
+	}
+
+	/* Remove number input spinner (increase/decrease icons). */
+	-moz-appearance: textfield;
+	appearance: textfield;
+
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		appearance: none;
+		margin: 0;
+	}
+}
+
+.cb-responsive-unit-control .components-base-control {
+	margin-bottom: 0 !important;
+}
+
+.cb-responsive-unit-control .components-base-control__field {
+	margin-bottom: 0 !important;
+}
+
+/* Override .wp-core-ui select so it doesn't add border, arrow, or size to our unit select. */
+.cb-responsive-unit-control__input-wrapper select.cb-responsive-unit-control__unit-select {
+	position: absolute;
+	right: 4px;
+	top: 50%;
+	transform: translateY(-50%);
+	height: auto;
+	min-height: unset;
+	max-width: none;
+	font-size: 11px;
+	line-height: 1;
+	padding: 0 8px;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	color: #007cba;
+	background: transparent !important;
+	background-image: none !important;
+	background-size: unset;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	cursor: pointer;
+	vertical-align: middle;
+
+	&:focus {
+		outline: none;
+		box-shadow: none;
+	}
+}
+

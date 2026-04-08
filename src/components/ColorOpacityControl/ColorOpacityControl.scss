@@ -1,0 +1,93 @@
+.cb-color-opacity-control {
+	margin-top: 0.25rem;
+	margin-bottom: 0.5rem;
+}
+
+.cb-color-opacity-control__label {
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.cb-color-opacity-control__swatch-row {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	padding: 8px 10px;
+	border: 1px solid #c3c4c7;
+	border-radius: 2px;
+	background: #fff;
+	cursor: pointer;
+	text-align: left;
+
+	&:hover,
+	&:focus-visible {
+		border-color: #1e1e1e;
+		box-shadow: 0 0 0 1px #1e1e1e;
+		outline: none;
+	}
+}
+
+.cb-color-opacity-control__swatch-group {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+
+	&--pair {
+		gap: 0;
+		position: relative;
+
+		.cb-color-opacity-control__swatch:first-child {
+			position: relative;
+			z-index: 1;
+		}
+
+		.cb-color-opacity-control__swatch--pair-front {
+			margin-left: -10px;
+			position: relative;
+			z-index: 2;
+		}
+	}
+}
+
+/* Match core block color indicator: one circle, simple border (no inset “double ring”). */
+.cb-color-opacity-control__swatch {
+	box-sizing: border-box;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	border: 1px solid rgba(32, 32, 32, 0.523);
+	flex-shrink: 0;
+}
+
+.cb-color-opacity-control__swatch--empty {
+	background: repeating-conic-gradient(
+			#ccc 0% 25%,
+			#fff 0% 50%
+		)
+		50% / 8px 8px;
+}
+
+.cb-color-opacity-control__popover-inner {
+	padding: 0;
+	min-width: 280px;
+	max-width: min(100vw - 32px, 380px);
+}
+
+.cb-color-opacity-control__popover-body {
+	padding: 10px 12px 12px;
+
+	.components-circular-option-picker {
+		width: 100%;
+	}
+}
+
+.cb-color-opacity-control__tab-panel {
+	.components-tab-panel__tabs {
+		border-bottom: 1px solid #ddd;
+		padding: 0 8px;
+		margin: 0;
+	}
+}
+

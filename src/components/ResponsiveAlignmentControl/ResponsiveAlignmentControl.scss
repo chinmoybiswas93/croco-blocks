@@ -1,0 +1,58 @@
+.cb-responsive-alignment-control {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-top: 0.25rem;
+	margin-bottom: 10px;
+}
+
+.cb-responsive-alignment-control__label {
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 5px;
+}
+
+.cb-responsive-alignment-control__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.cb-responsive-alignment-control__align {
+	flex: 1 1 auto;
+	display: inline-flex;
+	gap: 2px;
+
+	.components-button {
+		min-width: 26px;
+		padding-inline: 4px;
+		height: 28px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: none;
+	}
+}
+
+.cb-responsive-alignment-control__devices {
+	flex: 0 0 auto;
+	display: inline-flex;
+	gap: 2px;
+
+	.components-button {
+		min-width: 26px;
+		padding-inline: 4px;
+		height: 28px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: none;
+	}
+}
+
+.cb-responsive-alignment-control .components-base-control,
+.cb-responsive-alignment-control .components-base-control__field {
+	margin-bottom: 0 !important;
+}
+

@@ -1,0 +1,24 @@
+node_modules/
+
+build/
+
+vendor/
+
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+.cursor/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
