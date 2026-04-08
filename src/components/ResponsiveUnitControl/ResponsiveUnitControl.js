@@ -1,6 +1,15 @@
 import { useState } from '@wordpress/element';
-import { Button, ButtonGroup, TextControl } from '@wordpress/components';
+import {
+	TextControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import {
+	desktop as desktopIcon,
+	tablet as tabletIcon,
+	mobile as mobileIcon,
+} from '@wordpress/icons';
 import './ResponsiveUnitControl.scss';
 
 const DEFAULT_VALUES = {
@@ -8,6 +17,24 @@ const DEFAULT_VALUES = {
 	tablet: '',
 	mobile: '',
 };
+
+const DEVICE_OPTIONS = [
+	{
+		value: 'desktop',
+		label: __( 'Desktop', 'croco-blocks' ),
+		icon: desktopIcon,
+	},
+	{
+		value: 'tablet',
+		label: __( 'Tablet', 'croco-blocks' ),
+		icon: tabletIcon,
+	},
+	{
+		value: 'mobile',
+		label: __( 'Mobile', 'croco-blocks' ),
+		icon: mobileIcon,
+	},
+];
 
 export const ResponsiveUnitControl = ( {
 	label,
@@ -30,21 +57,6 @@ export const ResponsiveUnitControl = ( {
 		...DEFAULT_VALUES,
 		...values,
 	};
-
-	const devices = [
-		{
-			name: 'desktop',
-			label: __( 'Desktop', 'croco-blocks' ),
-		},
-		{
-			name: 'tablet',
-			label: __( 'Tablet', 'croco-blocks' ),
-		},
-		{
-			name: 'mobile',
-			label: __( 'Mobile', 'croco-blocks' ),
-		},
-	];
 
 	const handleValueChange = ( device, rawValue ) => {
 		let numeric = '';
@@ -120,32 +132,22 @@ export const ResponsiveUnitControl = ( {
 					</select>
 				</div>
 
-				<ButtonGroup className="cb-responsive-unit-control__devices">
-					{ devices.map( ( device ) => (
-						<Button
-							key={ device.name }
-							isSmall
-							icon={
-								device.name === 'desktop'
-									? 'desktop'
-									: device.name === 'tablet'
-									? 'tablet'
-									: 'smartphone'
-							}
-							variant={
-								activeDevice === device.name
-									? 'primary'
-									: 'secondary'
-							}
-							onClick={ () =>
-								setActiveDevice( device.name )
-							}
-							aria-label={ device.label }
+				<ToggleGroupControl
+					className="cb-responsive-unit-control__devices"
+					value={ activeDevice }
+					onChange={ setActiveDevice }
+					__nextHasNoMarginBottom
+				>
+					{ DEVICE_OPTIONS.map( ( option ) => (
+						<ToggleGroupControlOptionIcon
+							key={ option.value }
+							value={ option.value }
+							icon={ option.icon }
+							label={ option.label }
 						/>
 					) ) }
-				</ButtonGroup>
+				</ToggleGroupControl>
 			</div>
 		</div>
 	);
 };
-

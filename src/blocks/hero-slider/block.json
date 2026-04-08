@@ -261,20 +261,41 @@
 		"buttonStyle": {
 			"type": "string",
 			"default": "filled"
+		},
+		"cbPaddingTop": {
+			"type": "string",
+			"default": ""
+		},
+		"cbPaddingRight": {
+			"type": "string",
+			"default": ""
+		},
+		"cbPaddingBottom": {
+			"type": "string",
+			"default": ""
+		},
+		"cbPaddingLeft": {
+			"type": "string",
+			"default": ""
+		},
+		"cbMarginTop": {
+			"type": "string",
+			"default": ""
+		},
+		"cbMarginBottom": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {
 		"html": false,
-		"align": [ "wide", "full" ],
-		"spacing": {
-			"padding": true,
-			"margin": true
-		},
+		"align": false,
 		"color": false,
-		"typography": {
-			"fontSize": true,
-			"lineHeight": true
-		}
+		"spacing": false,
+		"typography": false,
+		"className": false,
+		"customClassName": false,
+		"anchor": false
 	},
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

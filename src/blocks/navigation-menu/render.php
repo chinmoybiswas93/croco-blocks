@@ -230,6 +230,32 @@ if ( $enable_toggle ) {
 	$nav_classes .= ' cb-navigation--has-toggle cb-navigation--toggle-from-' . esc_attr( $toggle_breakpoint );
 }
 
+$cb_padding_top    = isset( $attributes['cbPaddingTop'] ) ? $attributes['cbPaddingTop'] : '';
+$cb_padding_right  = isset( $attributes['cbPaddingRight'] ) ? $attributes['cbPaddingRight'] : '';
+$cb_padding_bottom = isset( $attributes['cbPaddingBottom'] ) ? $attributes['cbPaddingBottom'] : '';
+$cb_padding_left   = isset( $attributes['cbPaddingLeft'] ) ? $attributes['cbPaddingLeft'] : '';
+$cb_margin_top     = isset( $attributes['cbMarginTop'] ) ? $attributes['cbMarginTop'] : '';
+$cb_margin_bottom  = isset( $attributes['cbMarginBottom'] ) ? $attributes['cbMarginBottom'] : '';
+
+if ( '' !== $cb_padding_top ) {
+	$style .= 'padding-top:' . esc_attr( $cb_padding_top ) . ';';
+}
+if ( '' !== $cb_padding_right ) {
+	$style .= 'padding-right:' . esc_attr( $cb_padding_right ) . ';';
+}
+if ( '' !== $cb_padding_bottom ) {
+	$style .= 'padding-bottom:' . esc_attr( $cb_padding_bottom ) . ';';
+}
+if ( '' !== $cb_padding_left ) {
+	$style .= 'padding-left:' . esc_attr( $cb_padding_left ) . ';';
+}
+if ( '' !== $cb_margin_top ) {
+	$style .= 'margin-top:' . esc_attr( $cb_margin_top ) . ';';
+}
+if ( '' !== $cb_margin_bottom ) {
+	$style .= 'margin-bottom:' . esc_attr( $cb_margin_bottom ) . ';';
+}
+
 $wrapper_attributes = get_block_wrapper_attributes(
 	array(
 		'class' => $nav_classes,

@@ -158,28 +158,41 @@
 		"dropdownIndicatorSize": {
 			"type": "string",
 			"default": "12px"
+		},
+		"cbPaddingTop": {
+			"type": "string",
+			"default": ""
+		},
+		"cbPaddingRight": {
+			"type": "string",
+			"default": ""
+		},
+		"cbPaddingBottom": {
+			"type": "string",
+			"default": ""
+		},
+		"cbPaddingLeft": {
+			"type": "string",
+			"default": ""
+		},
+		"cbMarginTop": {
+			"type": "string",
+			"default": ""
+		},
+		"cbMarginBottom": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {
 		"html": false,
-		"align": [ "wide", "full" ],
-		"spacing": {
-			"padding": true,
-			"margin": true,
-			"blockGap": false
-		},
-		"typography": {
-			"fontSize": true,
-			"lineHeight": true,
-			"__experimentalFontFamily": true,
-			"__experimentalFontWeight": true,
-			"__experimentalTextTransform": true
-		},
-		"color": {
-			"text": true,
-			"background": true,
-			"link": true
-		}
+		"align": false,
+		"color": false,
+		"spacing": false,
+		"typography": false,
+		"className": false,
+		"customClassName": false,
+		"anchor": false
 	},
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

@@ -1,6 +1,17 @@
 import { useState } from '@wordpress/element';
-import { Button, ButtonGroup } from '@wordpress/components';
+import {
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import {
+	alignLeft,
+	alignCenter,
+	alignRight,
+	desktop as desktopIcon,
+	tablet as tabletIcon,
+	mobile as mobileIcon,
+} from '@wordpress/icons';
 import './ResponsiveAlignmentControl.scss';
 
 const DEFAULT_VALUES = {
@@ -8,6 +19,42 @@ const DEFAULT_VALUES = {
 	tablet: '',
 	mobile: '',
 };
+
+const ALIGNMENT_OPTIONS = [
+	{
+		value: 'left',
+		label: __( 'Left', 'croco-blocks' ),
+		icon: alignLeft,
+	},
+	{
+		value: 'center',
+		label: __( 'Center', 'croco-blocks' ),
+		icon: alignCenter,
+	},
+	{
+		value: 'right',
+		label: __( 'Right', 'croco-blocks' ),
+		icon: alignRight,
+	},
+];
+
+const DEVICE_OPTIONS = [
+	{
+		value: 'desktop',
+		label: __( 'Desktop', 'croco-blocks' ),
+		icon: desktopIcon,
+	},
+	{
+		value: 'tablet',
+		label: __( 'Tablet', 'croco-blocks' ),
+		icon: tabletIcon,
+	},
+	{
+		value: 'mobile',
+		label: __( 'Mobile', 'croco-blocks' ),
+		icon: mobileIcon,
+	},
+];
 
 export const ResponsiveAlignmentControl = ( {
 	label,
@@ -21,43 +68,10 @@ export const ResponsiveAlignmentControl = ( {
 		...values,
 	};
 
-	const devices = [
-		{
-			name: 'desktop',
-			label: __( 'Desktop', 'croco-blocks' ),
-		},
-		{
-			name: 'tablet',
-			label: __( 'Tablet', 'croco-blocks' ),
-		},
-		{
-			name: 'mobile',
-			label: __( 'Mobile', 'croco-blocks' ),
-		},
-	];
-
-	const alignmentOptions = [
-		{
-			value: 'left',
-			label: __( 'Left', 'croco-blocks' ),
-			icon: 'editor-alignleft',
-		},
-		{
-			value: 'center',
-			label: __( 'Center', 'croco-blocks' ),
-			icon: 'editor-aligncenter',
-		},
-		{
-			value: 'right',
-			label: __( 'Right', 'croco-blocks' ),
-			icon: 'editor-alignright',
-		},
-	];
-
-	const handleAlignmentChange = ( device, alignment ) => {
+	const handleAlignmentChange = ( alignment ) => {
 		const nextValues = {
 			...currentValues,
-			[ device ]: alignment,
+			[ activeDevice ]: alignment,
 		};
 
 		if ( typeof onChange === 'function' ) {
@@ -76,54 +90,39 @@ export const ResponsiveAlignmentControl = ( {
 			) }
 
 			<div className="cb-responsive-alignment-control__row">
-				<ButtonGroup className="cb-responsive-alignment-control__align">
-					{ alignmentOptions.map( ( option ) => (
-						<Button
+				<ToggleGroupControl
+					className="cb-responsive-alignment-control__align"
+					value={ activeAlignment }
+					onChange={ handleAlignmentChange }
+					isBlock
+					__nextHasNoMarginBottom
+				>
+					{ ALIGNMENT_OPTIONS.map( ( option ) => (
+						<ToggleGroupControlOptionIcon
 							key={ option.value }
-							isSmall
+							value={ option.value }
 							icon={ option.icon }
-							variant={
-								activeAlignment === option.value
-									? 'primary'
-									: 'secondary'
-							}
-							onClick={ () =>
-								handleAlignmentChange(
-									activeDevice,
-									option.value
-								)
-							}
-							aria-label={ option.label }
+							label={ option.label }
 						/>
 					) ) }
-				</ButtonGroup>
+				</ToggleGroupControl>
 
-				<ButtonGroup className="cb-responsive-alignment-control__devices">
-					{ devices.map( ( device ) => (
-						<Button
-							key={ device.name }
-							isSmall
-							icon={
-								device.name === 'desktop'
-									? 'desktop'
-									: device.name === 'tablet'
-									? 'tablet'
-									: 'smartphone'
-							}
-							variant={
-								activeDevice === device.name
-									? 'primary'
-									: 'secondary'
-							}
-							onClick={ () =>
-								setActiveDevice( device.name )
-							}
-							aria-label={ device.label }
+				<ToggleGroupControl
+					className="cb-responsive-alignment-control__devices"
+					value={ activeDevice }
+					onChange={ setActiveDevice }
+					__nextHasNoMarginBottom
+				>
+					{ DEVICE_OPTIONS.map( ( option ) => (
+						<ToggleGroupControlOptionIcon
+							key={ option.value }
+							value={ option.value }
+							icon={ option.icon }
+							label={ option.label }
 						/>
 					) ) }
-				</ButtonGroup>
+				</ToggleGroupControl>
 			</div>
 		</div>
 	);
 };
-
