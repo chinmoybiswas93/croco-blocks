@@ -2,7 +2,6 @@ import { useState } from '@wordpress/element';
 import { TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { DeviceSwitcher } from '../../ui/DeviceSwitcher/DeviceSwitcher';
-import './ResponsiveUnitControl.scss';
 
 const DEFAULT_VALUES = {
 	desktop: '',

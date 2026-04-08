@@ -10,7 +10,6 @@ import {
 	alignRight,
 } from '@wordpress/icons';
 import { DeviceSwitcher } from '../../ui/DeviceSwitcher/DeviceSwitcher';
-import './ResponsiveAlignmentControl.scss';
 
 const DEFAULT_VALUES = {
 	desktop: 'left',

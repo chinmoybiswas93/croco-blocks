@@ -21,10 +21,13 @@
 	cursor: pointer;
 	text-align: left;
 
-	&:hover,
+	&:hover {
+		box-shadow: none;
+		outline: none;
+	}
+
 	&:focus-visible {
-		border-color: #1e1e1e;
-		box-shadow: 0 0 0 1px #1e1e1e;
+		box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #007cba);
 		outline: none;
 	}
 }
@@ -51,13 +54,13 @@
 	}
 }
 
-/* Match core block color indicator: one circle, simple border (no inset “double ring”). */
+/* Match core block color indicator: one circle, same border as swatch row. */
 .cb-color-opacity-control__swatch {
 	box-sizing: border-box;
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
-	border: 1px solid rgba(32, 32, 32, 0.523);
+	border: 1px solid #c3c4c7;
 	flex-shrink: 0;
 }
 

@@ -6,7 +6,6 @@ import {
 	tablet as tabletIcon,
 	mobile as mobileIcon,
 } from '@wordpress/icons';
-import './DeviceSwitcher.scss';
 
 const DEVICE_OPTIONS = [
 	{

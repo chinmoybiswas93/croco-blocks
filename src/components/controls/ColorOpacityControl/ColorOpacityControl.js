@@ -5,7 +5,6 @@ import {
 } from '@wordpress/block-editor';
 import { Popover, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import './ColorOpacityControl.scss';
 
 const TAB_DEFAULT = 'default';
 const TAB_HOVER = 'hover';

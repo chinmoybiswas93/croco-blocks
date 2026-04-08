@@ -3,7 +3,6 @@ import { Icon, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { cog, brush, settings } from '@wordpress/icons';
 import { AdvancedControls } from '../AdvancedControls/AdvancedControls';
-import './InspectorTabs.scss';
 
 const TABS = [
 	{

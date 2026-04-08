@@ -2,6 +2,10 @@ const path = require( 'path' );
 const wpConfig = require( '@wordpress/scripts/config/webpack.config' );
 
 const adminEntry = path.resolve( __dirname, 'src/admin/index.js' );
+const editorSharedEntry = path.resolve(
+	__dirname,
+	'src/editor-shared/index.js'
+);
 
 function addAdminEntry( config ) {
 	if ( Array.isArray( config ) ) {
@@ -18,6 +22,7 @@ function addAdminEntry( config ) {
 				return {
 					...base,
 					'admin/index': adminEntry,
+					'editor-shared/index': editorSharedEntry,
 				};
 			},
 		};
@@ -33,6 +38,7 @@ function addAdminEntry( config ) {
 			entry: {
 				...originalEntry,
 				'admin/index': adminEntry,
+				'editor-shared/index': editorSharedEntry,
 			},
 		};
 	}
