@@ -14,10 +14,10 @@ import { store as coreStore } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 import metadata from './block.json';
-import { InspectorTabs } from '../../components/InspectorTabs/InspectorTabs';
-import { ResponsiveAlignmentControl } from '../../components/ResponsiveAlignmentControl/ResponsiveAlignmentControl';
-import { AlignmentControl } from '../../components/AlignmentControl/AlignmentControl';
-import { ColorOpacityControl } from '../../components/ColorOpacityControl/ColorOpacityControl';
+import { InspectorTabs } from '../../components/inspector/InspectorTabs/InspectorTabs';
+import { ResponsiveAlignmentControl } from '../../components/controls/ResponsiveAlignmentControl/ResponsiveAlignmentControl';
+import { AlignmentControl } from '../../components/controls/AlignmentControl/AlignmentControl';
+import { ColorOpacityControl } from '../../components/controls/ColorOpacityControl/ColorOpacityControl';
 import './style.scss';
 import './editor.scss';
 

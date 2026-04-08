@@ -19,9 +19,9 @@ import ServerSideRender from '@wordpress/server-side-render';
 import metadata from './block.json';
 import './style.scss';
 import './editor.scss';
-import { InspectorTabs } from '../../components/InspectorTabs/InspectorTabs';
-import { ResponsiveUnitControl } from '../../components/ResponsiveUnitControl/ResponsiveUnitControl';
-import { ColorOpacityControl } from '../../components/ColorOpacityControl/ColorOpacityControl';
+import { InspectorTabs } from '../../components/inspector/InspectorTabs/InspectorTabs';
+import { ResponsiveUnitControl } from '../../components/controls/ResponsiveUnitControl/ResponsiveUnitControl';
+import { ColorOpacityControl } from '../../components/controls/ColorOpacityControl/ColorOpacityControl';
 
 const DEFAULT_SLIDE = {
 	id: null,

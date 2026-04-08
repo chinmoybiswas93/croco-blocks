@@ -1,21 +1,37 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { TabPanel } from '@wordpress/components';
+import { Icon, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { cog, brush, settings } from '@wordpress/icons';
 import { AdvancedControls } from '../AdvancedControls/AdvancedControls';
 import './InspectorTabs.scss';
 
 const TABS = [
 	{
 		name: 'settings',
-		title: __( 'Settings', 'croco-blocks' ),
+		title: (
+			<>
+				<Icon icon={ cog } />
+				<span>{ __( 'General', 'croco-blocks' ) }</span>
+			</>
+		),
 	},
 	{
 		name: 'styles',
-		title: __( 'Styles', 'croco-blocks' ),
+		title: (
+			<>
+				<Icon icon={ brush } />
+				<span>{ __( 'Style', 'croco-blocks' ) }</span>
+			</>
+		),
 	},
 	{
 		name: 'advanced',
-		title: __( 'Advanced', 'croco-blocks' ),
+		title: (
+			<>
+				<Icon icon={ settings } />
+				<span>{ __( 'Advanced', 'croco-blocks' ) }</span>
+			</>
+		),
 	},
 ];
 

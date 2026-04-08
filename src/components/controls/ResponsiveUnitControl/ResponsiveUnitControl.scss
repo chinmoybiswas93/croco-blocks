@@ -6,33 +6,16 @@
 	margin-bottom: 10px;
 }
 
-.cb-responsive-unit-control__label {
-	font-size: 13px;
-	font-weight: 500;
-	margin-bottom: 5px;
-}
-
-.cb-responsive-unit-control__row {
+.cb-responsive-unit-control__header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 8px;
 }
 
-.cb-responsive-unit-control__devices {
-	flex: 0 0 auto;
-	display: inline-flex;
-	gap: 2px;
-
-	.components-button {
-		min-width: 26px;
-		padding-inline: 4px;
-		height: 28px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: none;
-	}
+.cb-responsive-unit-control__label {
+	font-size: 13px;
+	font-weight: 500;
 }
 
 .cb-responsive-unit-control__input-wrapper {
@@ -59,7 +42,7 @@
 .cb-responsive-unit-control__input input.components-text-control__input {
 	min-width: 72px;
 	height: 100%;
-	padding: 5px 5px 5px 5px;
+	padding: 5px;
 	border: none;
 	box-shadow: none;
 	border-radius: 0;
@@ -71,7 +54,6 @@
 		outline: none;
 	}
 
-	/* Remove number input spinner (increase/decrease icons). */
 	-moz-appearance: textfield;
 	appearance: textfield;
 
@@ -91,7 +73,6 @@
 	margin-bottom: 0 !important;
 }
 
-/* Override .wp-core-ui select so it doesn't add border, arrow, or size to our unit select. */
 .cb-responsive-unit-control__input-wrapper select.cb-responsive-unit-control__unit-select {
 	position: absolute;
 	right: 4px;
@@ -121,4 +102,3 @@
 		box-shadow: none;
 	}
 }
-
