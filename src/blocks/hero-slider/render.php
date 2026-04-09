@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once dirname( __DIR__, 3 ) . '/src/block-support/spacing-css.php';
+
 $slides         = isset( $attributes['slides'] ) && is_array( $attributes['slides'] ) ? $attributes['slides'] : array();
 $show_arrows    = ! empty( $attributes['showArrows'] );
 $show_dots      = ! empty( $attributes['showDots'] );
@@ -309,32 +311,7 @@ if ( $button_align ) {
 	$style_variables[] = '--cb-hero-slider-button-justify:' . $justify;
 }
 
-$cb_padding_top    = isset( $attributes['cbPaddingTop'] ) ? $attributes['cbPaddingTop'] : '';
-$cb_padding_right  = isset( $attributes['cbPaddingRight'] ) ? $attributes['cbPaddingRight'] : '';
-$cb_padding_bottom = isset( $attributes['cbPaddingBottom'] ) ? $attributes['cbPaddingBottom'] : '';
-$cb_padding_left   = isset( $attributes['cbPaddingLeft'] ) ? $attributes['cbPaddingLeft'] : '';
-$cb_margin_top     = isset( $attributes['cbMarginTop'] ) ? $attributes['cbMarginTop'] : '';
-$cb_margin_bottom  = isset( $attributes['cbMarginBottom'] ) ? $attributes['cbMarginBottom'] : '';
-
-$cb_spacing_styles = '';
-if ( '' !== $cb_padding_top ) {
-	$cb_spacing_styles .= 'padding-top:' . esc_attr( $cb_padding_top ) . ';';
-}
-if ( '' !== $cb_padding_right ) {
-	$cb_spacing_styles .= 'padding-right:' . esc_attr( $cb_padding_right ) . ';';
-}
-if ( '' !== $cb_padding_bottom ) {
-	$cb_spacing_styles .= 'padding-bottom:' . esc_attr( $cb_padding_bottom ) . ';';
-}
-if ( '' !== $cb_padding_left ) {
-	$cb_spacing_styles .= 'padding-left:' . esc_attr( $cb_padding_left ) . ';';
-}
-if ( '' !== $cb_margin_top ) {
-	$cb_spacing_styles .= 'margin-top:' . esc_attr( $cb_margin_top ) . ';';
-}
-if ( '' !== $cb_margin_bottom ) {
-	$cb_spacing_styles .= 'margin-bottom:' . esc_attr( $cb_margin_bottom ) . ';';
-}
+$cb_spacing_vars = croco_blocks_spacing_css_vars_style( $attributes );
 
 $style_value = '';
 
@@ -342,8 +319,8 @@ if ( ! empty( $style_variables ) ) {
 	$style_value = implode( ';', $style_variables );
 }
 
-if ( $cb_spacing_styles ) {
-	$style_value .= ';' . $cb_spacing_styles;
+if ( '' !== $cb_spacing_vars ) {
+	$style_value .= ( '' !== $style_value ? ';' : '' ) . $cb_spacing_vars;
 }
 
 $wrapper_extra_attributes = array(

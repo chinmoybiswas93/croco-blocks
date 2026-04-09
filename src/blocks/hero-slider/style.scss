@@ -416,3 +416,21 @@
 	}
 }
 
+@import '../../block-support/responsive-spacing-frontend';
+
+.cb-hero-slider.wp-block-croco-blocks-hero-slider {
+	@include croco-blocks-spacing-longhands-mobile;
+}
+
+@media (min-width: $cb-spacing-bp-tablet) {
+	.cb-hero-slider.wp-block-croco-blocks-hero-slider {
+		@include croco-blocks-spacing-longhands-tablet;
+	}
+}
+
+@media (min-width: $cb-spacing-bp-desktop) {
+	.cb-hero-slider.wp-block-croco-blocks-hero-slider {
+		@include croco-blocks-spacing-longhands-desktop;
+	}
+}
+

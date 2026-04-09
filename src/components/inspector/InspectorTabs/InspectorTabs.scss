@@ -90,3 +90,13 @@
 .croco-blocks-spacing-grid--2col {
 	grid-template-columns: 1fr 1fr;
 }
+
+.croco-blocks-advanced-controls {
+	padding: 12px 16px;
+
+	&__section + &__section {
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid #e0e0e0;
+	}
+}

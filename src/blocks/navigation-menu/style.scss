@@ -630,4 +630,21 @@ nav.wp-block-croco-blocks-navigation-menu {
 	}
 }
 
+@import '../../block-support/responsive-spacing-frontend';
+
+nav.wp-block-croco-blocks-navigation-menu {
+	@include croco-blocks-spacing-longhands-mobile;
+}
+
+@media (min-width: $cb-spacing-bp-tablet) {
+	nav.wp-block-croco-blocks-navigation-menu {
+		@include croco-blocks-spacing-longhands-tablet;
+	}
+}
+
+@media (min-width: $cb-spacing-bp-desktop) {
+	nav.wp-block-croco-blocks-navigation-menu {
+		@include croco-blocks-spacing-longhands-desktop;
+	}
+}
 

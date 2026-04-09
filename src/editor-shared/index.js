@@ -7,3 +7,4 @@ import '../components/ui/DeviceSwitcher/DeviceSwitcher.scss';
 import '../components/controls/ResponsiveAlignmentControl/ResponsiveAlignmentControl.scss';
 import '../components/controls/ResponsiveUnitControl/ResponsiveUnitControl.scss';
 import '../components/controls/ColorOpacityControl/ColorOpacityControl.scss';
+import '../components/controls/ResponsiveSpacingControl/ResponsiveSpacingControl.scss';

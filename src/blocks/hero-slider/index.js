@@ -21,6 +21,7 @@ import './style.scss';
 import './editor.scss';
 import { InspectorTabs } from '../../components/inspector/InspectorTabs/InspectorTabs';
 import { ResponsiveUnitControl } from '../../components/controls/ResponsiveUnitControl/ResponsiveUnitControl';
+import { getSpacingCssVarsForEditor } from '../../utils/spacingKeys';
 import { ColorOpacityControl } from '../../components/controls/ColorOpacityControl/ColorOpacityControl';
 
 const DEFAULT_SLIDE = {
@@ -104,7 +105,9 @@ registerBlockType( metadata.name, {
 			buttonStyle,
 		} = attributes;
 
-		const blockProps = useBlockProps();
+		const blockProps = useBlockProps( {
+			style: getSpacingCssVarsForEditor( attributes ),
+		} );
 
 		const updateSlide = ( index, updates ) => {
 			const nextSlides = [ ...slides ];
