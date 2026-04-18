@@ -7,6 +7,8 @@ $cb-spacing-bp-tablet: 782px;
 $cb-spacing-bp-desktop: 960px;
 
 @mixin croco-blocks-spacing-longhands-mobile {
+	/* Padding must not expand total width (nav and some roots default to content-box). */
+	box-sizing: border-box;
 	padding-top: var(
 		--cb-padding-top-mobile,
 		var(--cb-padding-top-tablet, var(--cb-padding-top))

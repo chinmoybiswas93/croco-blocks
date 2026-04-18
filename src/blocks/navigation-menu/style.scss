@@ -632,18 +632,43 @@ nav.wp-block-croco-blocks-navigation-menu {
 
 @import '../../block-support/responsive-spacing-frontend';
 
-nav.wp-block-croco-blocks-navigation-menu {
+// Use .wp-block-* only (not nav) so Advanced spacing applies on the real block
+// root. Exclude the editor-only wrapper around ServerSideRender to avoid doubling.
+.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 	@include croco-blocks-spacing-longhands-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
-	nav.wp-block-croco-blocks-navigation-menu {
+	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 		@include croco-blocks-spacing-longhands-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
-	nav.wp-block-croco-blocks-navigation-menu {
+	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
+		@include croco-blocks-spacing-longhands-desktop;
+	}
+}
+
+/* Editor: no menu / no SSR — preview spacing on the wrapper only. */
+.wp-block-croco-blocks-navigation-menu.croco-blocks-ssr-editor-root:not(
+		:has(nav.wp-block-croco-blocks-navigation-menu)
+	) {
+	@include croco-blocks-spacing-longhands-mobile;
+}
+
+@media (min-width: $cb-spacing-bp-tablet) {
+	.wp-block-croco-blocks-navigation-menu.croco-blocks-ssr-editor-root:not(
+			:has(nav.wp-block-croco-blocks-navigation-menu)
+		) {
+		@include croco-blocks-spacing-longhands-tablet;
+	}
+}
+
+@media (min-width: $cb-spacing-bp-desktop) {
+	.wp-block-croco-blocks-navigation-menu.croco-blocks-ssr-editor-root:not(
+			:has(nav.wp-block-croco-blocks-navigation-menu)
+		) {
 		@include croco-blocks-spacing-longhands-desktop;
 	}
 }

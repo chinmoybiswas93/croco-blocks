@@ -28,4 +28,5 @@ export const advancedAttributes = {
 	cbMarginLeftMobile: { type: 'string', default: '' },
 	cbMarginUnit: { type: 'string', default: 'px' },
 	cbMarginLinked: { type: 'boolean', default: false },
+	cbAdvancedBackgroundColor: { type: 'string', default: '' },
 };

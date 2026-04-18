@@ -418,18 +418,43 @@
 
 @import '../../block-support/responsive-spacing-frontend';
 
-.cb-hero-slider.wp-block-croco-blocks-hero-slider {
+// Front end + SSR preview: one root with spacing. Editor wraps SSR in an extra
+// div.croco-blocks-ssr-editor-root — exclude it so padding/margin are not doubled.
+.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root) {
 	@include croco-blocks-spacing-longhands-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
-	.cb-hero-slider.wp-block-croco-blocks-hero-slider {
+	.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root) {
 		@include croco-blocks-spacing-longhands-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
-	.cb-hero-slider.wp-block-croco-blocks-hero-slider {
+	.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root) {
+		@include croco-blocks-spacing-longhands-desktop;
+	}
+}
+
+/* Editor: no SSR yet — preview spacing on the wrapper only. */
+.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
+		:has(.wp-block-croco-blocks-hero-slider)
+	) {
+	@include croco-blocks-spacing-longhands-mobile;
+}
+
+@media (min-width: $cb-spacing-bp-tablet) {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
+			:has(.wp-block-croco-blocks-hero-slider)
+		) {
+		@include croco-blocks-spacing-longhands-tablet;
+	}
+}
+
+@media (min-width: $cb-spacing-bp-desktop) {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
+			:has(.wp-block-croco-blocks-hero-slider)
+		) {
 		@include croco-blocks-spacing-longhands-desktop;
 	}
 }

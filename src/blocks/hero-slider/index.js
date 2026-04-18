@@ -22,6 +22,7 @@ import './editor.scss';
 import { InspectorTabs } from '../../components/inspector/InspectorTabs/InspectorTabs';
 import { ResponsiveUnitControl } from '../../components/controls/ResponsiveUnitControl/ResponsiveUnitControl';
 import { getSpacingCssVarsForEditor } from '../../utils/spacingKeys';
+import { getAdvancedBackgroundStyle } from '../../utils/advancedBackground';
 import { ColorOpacityControl } from '../../components/controls/ColorOpacityControl/ColorOpacityControl';
 
 const DEFAULT_SLIDE = {
@@ -106,7 +107,11 @@ registerBlockType( metadata.name, {
 		} = attributes;
 
 		const blockProps = useBlockProps( {
-			style: getSpacingCssVarsForEditor( attributes ),
+			className: 'croco-blocks-ssr-editor-root',
+			style: {
+				...getSpacingCssVarsForEditor( attributes ),
+				...getAdvancedBackgroundStyle( attributes ),
+			},
 		} );
 
 		const updateSlide = ( index, updates ) => {

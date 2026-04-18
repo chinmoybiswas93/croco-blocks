@@ -15,6 +15,7 @@ import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 import metadata from './block.json';
 import { getSpacingCssVarsForEditor } from '../../utils/spacingKeys';
+import { getAdvancedBackgroundStyle } from '../../utils/advancedBackground';
 import { InspectorTabs } from '../../components/inspector/InspectorTabs/InspectorTabs';
 import { ResponsiveAlignmentControl } from '../../components/controls/ResponsiveAlignmentControl/ResponsiveAlignmentControl';
 import { AlignmentControl } from '../../components/controls/AlignmentControl/AlignmentControl';
@@ -66,7 +67,11 @@ registerBlockType( metadata.name, {
 		} = attributes;
 
 		const blockProps = useBlockProps( {
-			style: getSpacingCssVarsForEditor( attributes ),
+			className: 'croco-blocks-ssr-editor-root',
+			style: {
+				...getSpacingCssVarsForEditor( attributes ),
+				...getAdvancedBackgroundStyle( attributes ),
+			},
 		} );
 
 		const menus = useSelect(

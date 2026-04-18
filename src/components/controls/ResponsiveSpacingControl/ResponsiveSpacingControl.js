@@ -57,8 +57,10 @@ export const ResponsiveSpacingControl = ( {
 		setAttributes( patch );
 	};
 
-	const handleNumericChange = ( side, numStr ) => {
-		const formatted = formatSpacingValue( numStr, unit );
+	const handleNumericChange = ( side, raw ) => {
+		const numStr =
+			raw === undefined || raw === null ? '' : String( raw ).trim();
+		const formatted = formatSpacingValue( numStr, unit, mode );
 		if ( linked ) {
 			setAllSides( formatted );
 			return;
@@ -76,12 +78,11 @@ export const ResponsiveSpacingControl = ( {
 				const key = getSpacingAttrKey( mode, side, d );
 				const raw = attributes[ key ];
 				if ( raw === undefined || raw === null || String( raw ).trim() === '' ) {
+					patch[ key ] = formatSpacingValue( '0', newUnit, mode );
 					continue;
 				}
 				const { num } = parseSpacingValue( raw );
-				if ( num !== '' ) {
-					patch[ key ] = formatSpacingValue( num, newUnit );
-				}
+				patch[ key ] = formatSpacingValue( num, newUnit, mode );
 			}
 		}
 		setAttributes( patch );
@@ -99,7 +100,7 @@ export const ResponsiveSpacingControl = ( {
 				}
 			}
 			const { num } = parseSpacingValue( source );
-			const val = formatSpacingValue( num, unit );
+			const val = formatSpacingValue( num, unit, mode );
 			const patch = { [ linkedKey ]: true };
 			for ( const s of SPACING_SIDES ) {
 				patch[ getSpacingAttrKey( mode, s, device ) ] = val;
@@ -113,6 +114,15 @@ export const ResponsiveSpacingControl = ( {
 	const displayNumForSide = ( side ) => {
 		const raw = linked ? getValueForSide( 'Top' ) : getValueForSide( side );
 		const { num } = parseSpacingValue( raw );
+		if ( num === '' ) {
+			return '0';
+		}
+		if ( mode === 'padding' ) {
+			const p = parseFloat( num );
+			if ( Number.isFinite( p ) && p < 0 ) {
+				return '0';
+			}
+		}
 		return num;
 	};
 
@@ -149,8 +159,9 @@ export const ResponsiveSpacingControl = ( {
 							>
 								<input
 									className="cb-responsive-spacing__input-native"
-									type="text"
-									inputMode="decimal"
+									type="number"
+									step="any"
+									min={ mode === 'padding' ? 0 : undefined }
 									value={ num }
 									disabled={ disabled }
 									aria-disabled={ disabled }

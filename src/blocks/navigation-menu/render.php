@@ -234,7 +234,13 @@ if ( $enable_toggle ) {
 
 $cb_spacing_vars = croco_blocks_spacing_css_vars_style( $attributes );
 if ( '' !== $cb_spacing_vars ) {
+	// CSS variables only; padding/margin longhands come from block SCSS (responsive breakpoints).
 	$style .= $cb_spacing_vars;
+}
+
+$cb_bg = croco_blocks_advanced_background_style_fragment( $attributes );
+if ( '' !== $cb_bg ) {
+	$style .= ( '' !== $style ? ';' : '' ) . rtrim( $cb_bg, ';' );
 }
 
 $wrapper_attributes = get_block_wrapper_attributes(

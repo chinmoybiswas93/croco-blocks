@@ -110,10 +110,15 @@
 		}
 	}
 
+	&__track-cell > &__input-native {
+		min-height: 32px;
+		padding: 0 0 0 4px;
+	}
+
 	&__input-native {
 		width: 100%;
 		margin: 0;
-		padding: 6px 8px;
+		box-sizing: border-box;
 		font-size: 13px;
 		line-height: 1.4;
 		text-align: center;
@@ -125,8 +130,7 @@
 		outline: none;
 		background: transparent;
 		color: #1e1e1e;
-		-webkit-appearance: none;
-		appearance: none;
+		/* Leave native number spinners visible (do not use appearance: none). */
 
 		&:focus {
 			outline: none;

@@ -66,14 +66,22 @@ export function parseSpacingValue( raw ) {
 /**
  * @param {string} num
  * @param {string} unit
- * @return {string}
+ * @param {'padding'|'margin'|undefined} mode Padding cannot be negative; margin can.
+ * @return {string} Never empty — blanks become 0 with unit (consistent CSS vars).
  */
-export function formatSpacingValue( num, unit ) {
-	if ( num === undefined || num === null || String( num ).trim() === '' ) {
-		return '';
-	}
+export function formatSpacingValue( num, unit, mode ) {
 	const u = unit || 'px';
-	return `${ String( num ).trim() }${ u }`;
+	if ( num === undefined || num === null || String( num ).trim() === '' ) {
+		return `0${ u }`;
+	}
+	let n = String( num ).trim();
+	if ( mode === 'padding' ) {
+		const parsed = parseFloat( n );
+		if ( Number.isFinite( parsed ) && parsed < 0 ) {
+			n = '0';
+		}
+	}
+	return `${ n }${ u }`;
 }
 
 /**
@@ -95,21 +103,45 @@ export function getSpacingCssVarsForEditor( attributes ) {
 	];
 
 	for ( const { name, css } of modes ) {
-		for ( const side of SPACING_SIDES ) {
-			const sideLower = side.toLowerCase();
-			for ( const { id, suffix } of devices ) {
-				const device =
-					id === 'desktop'
-						? 'desktop'
-						: id === 'tablet'
-							? 'tablet'
-							: 'mobile';
-				const key = getSpacingAttrKey( name, side, device );
-				const val = attributes[ key ];
-				if ( val !== undefined && val !== null && String( val ).trim() !== '' ) {
-					out[ `--cb-${ css }-${ sideLower }${ suffix }` ] =
-						String( val ).trim();
-				}
+		const unitKey =
+			name === 'padding' ? 'cbPaddingUnit' : 'cbMarginUnit';
+		const unit = attributes[ unitKey ] || 'px';
+		const zeroVal = formatSpacingValue( '0', unit, name );
+
+		for ( const { id, suffix } of devices ) {
+			const keys = SPACING_SIDES.map( ( side ) =>
+				getSpacingAttrKey( name, side, id )
+			);
+			const hasAny = keys.some( ( k ) => {
+				const v = attributes[ k ];
+				return (
+					v !== undefined &&
+					v !== null &&
+					String( v ).trim() !== ''
+				);
+			} );
+			if ( ! hasAny ) {
+				continue;
+			}
+			for ( const side of SPACING_SIDES ) {
+				const key = getSpacingAttrKey( name, side, id );
+				const sideLower = side.toLowerCase();
+				const raw = attributes[ key ];
+				const trimmed =
+					raw !== undefined &&
+					raw !== null &&
+					String( raw ).trim() !== ''
+						? String( raw ).trim()
+						: '';
+				const { num } = parseSpacingValue(
+					trimmed || `0${ unit }`
+				);
+				const val = formatSpacingValue(
+					num === '' ? '0' : num,
+					unit,
+					name
+				);
+				out[ `--cb-${ css }-${ sideLower }${ suffix }` ] = val;
 			}
 		}
 	}
