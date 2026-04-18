@@ -1,6 +1,10 @@
 .croco-blocks-border-controls {
 	margin-bottom: 1rem;
 
+	&--in-panel {
+		margin-bottom: 0;
+	}
+
 	.croco-blocks-advanced-controls__section-title {
 		display: block;
 		margin-bottom: 8px;

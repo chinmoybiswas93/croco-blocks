@@ -41,13 +41,26 @@ function borderStyleShowsDetails( style ) {
  * @param {Object} props
  * @param {Object} props.attributes
  * @param {Function} props.setAttributes
+ * @param {boolean} [props.showSectionTitle=true] When false, omit the inline "Border" heading (e.g. when wrapped in `PanelBody`).
  */
-export const BorderControls = ( { attributes, setAttributes } ) => {
+export const BorderControls = ( {
+	attributes,
+	setAttributes,
+	showSectionTitle = true,
+} ) => {
 	return (
-		<div className="croco-blocks-border-controls">
-			<span className="croco-blocks-advanced-controls__section-title">
-				{ __( 'Border', 'croco-blocks' ) }
-			</span>
+		<div
+			className={
+				showSectionTitle
+					? 'croco-blocks-border-controls'
+					: 'croco-blocks-border-controls croco-blocks-border-controls--in-panel'
+			}
+		>
+			{ showSectionTitle && (
+				<span className="croco-blocks-advanced-controls__section-title">
+					{ __( 'Border', 'croco-blocks' ) }
+				</span>
+			) }
 			<TabPanel
 				className="croco-blocks-border-controls__tabs"
 				activeClass="is-active"

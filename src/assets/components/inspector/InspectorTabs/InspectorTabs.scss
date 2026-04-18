@@ -92,12 +92,23 @@
 }
 
 .croco-blocks-advanced-controls {
-	padding: 12px 16px;
+	/* Padding + margin live in a padded group; Border uses core PanelBody full-width below it. */
+	&__spacing {
+		padding: 12px 16px;
 
-	/* Only separate top-level sections (Padding, Margin, Border, Background). */
-	&__section:not(&__section--nested) + &__section:not(&__section--nested) {
-		margin-top: 1rem;
-		padding-top: 1rem;
-		border-top: 1px solid #e0e0e0;
+		.croco-blocks-advanced-controls__section
+			+ .croco-blocks-advanced-controls__section {
+			margin-top: 1rem;
+			padding-top: 1rem;
+			border-top: 1px solid #e0e0e0;
+		}
+	}
+
+	/* Match core inspector panels: not nested inside the spacing block. */
+	&__border-panel.components-panel__body,
+	&__background-panel.components-panel__body {
+		margin: 0;
+		border-left: none;
+		border-right: none;
 	}
 }
