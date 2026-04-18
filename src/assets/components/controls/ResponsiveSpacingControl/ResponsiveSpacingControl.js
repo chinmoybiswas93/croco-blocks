@@ -17,7 +17,7 @@ import './ResponsiveSpacingControl.scss';
 /**
  * @param {Object} props
  * @param {string} props.label
- * @param {'padding'|'margin'|'border'|'borderHover'} props.mode
+ * @param {'padding'|'margin'|'border'|'borderHover'|'borderRadius'|'borderRadiusHover'} props.mode
  * @param {Object} props.attributes
  * @param {Function} props.setAttributes
  */
@@ -120,7 +120,9 @@ export const ResponsiveSpacingControl = ( {
 		if (
 			mode === 'padding' ||
 			mode === 'border' ||
-			mode === 'borderHover'
+			mode === 'borderHover' ||
+			mode === 'borderRadius' ||
+			mode === 'borderRadiusHover'
 		) {
 			const p = parseFloat( num );
 			if ( Number.isFinite( p ) && p < 0 ) {
@@ -168,7 +170,9 @@ export const ResponsiveSpacingControl = ( {
 									min={
 										mode === 'padding' ||
 										mode === 'border' ||
-										mode === 'borderHover'
+										mode === 'borderHover' ||
+										mode === 'borderRadius' ||
+										mode === 'borderRadiusHover'
 											? 0
 											: undefined
 									}

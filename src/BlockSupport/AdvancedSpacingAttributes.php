@@ -260,6 +260,118 @@ class AdvancedSpacingAttributes {
 				'type'    => 'string',
 				'default' => '',
 			),
+			'cbBorderRadiusTop'         => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusRight'       => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusBottom'      => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusLeft'        => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusTopTablet'   => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusTopMobile'   => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusRightTablet' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusRightMobile' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusBottomTablet' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusBottomMobile' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusLeftTablet'  => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusLeftMobile'  => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusUnit'        => array(
+				'type'    => 'string',
+				'default' => 'px',
+			),
+			'cbBorderRadiusLinked'      => array(
+				'type'    => 'boolean',
+				'default' => false,
+			),
+			'cbBorderRadiusHoverTop'    => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverRight'  => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverBottom' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverLeft'   => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverTopTablet' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverTopMobile' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverRightTablet' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverRightMobile' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverBottomTablet' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverBottomMobile' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverLeftTablet' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverLeftMobile' => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+			'cbBorderRadiusHoverUnit'   => array(
+				'type'    => 'string',
+				'default' => 'px',
+			),
+			'cbBorderRadiusHoverLinked' => array(
+				'type'    => 'boolean',
+				'default' => false,
+			),
 			'cbInstanceKey'             => array(
 				'type'    => 'string',
 				'default' => '',

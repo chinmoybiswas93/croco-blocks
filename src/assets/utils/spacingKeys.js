@@ -8,12 +8,13 @@ export const SPACING_UNITS = [
 	{ value: 'px', label: 'px' },
 	{ value: 'rem', label: 'rem' },
 	{ value: 'em', label: 'em' },
+	{ value: '%', label: '%' },
 	{ value: 'vh', label: 'vh' },
 	{ value: 'vw', label: 'vw' },
 ];
 
 /**
- * @param {'padding'|'margin'|'border'|'borderHover'} mode
+ * @param {'padding'|'margin'|'border'|'borderHover'|'borderRadius'|'borderRadiusHover'} mode
  * @param {'Top'|'Right'|'Bottom'|'Left'} side
  * @param {'desktop'|'tablet'|'mobile'} device
  * @return {string} Attribute key e.g. cbPaddingTopTablet
@@ -28,6 +29,10 @@ export function getSpacingAttrKey( mode, side, device ) {
 		prefix = 'cbBorder';
 	} else if ( mode === 'borderHover' ) {
 		prefix = 'cbBorderHover';
+	} else if ( mode === 'borderRadius' ) {
+		prefix = 'cbBorderRadius';
+	} else if ( mode === 'borderRadiusHover' ) {
+		prefix = 'cbBorderRadiusHover';
 	} else {
 		prefix = 'cbMargin';
 	}
@@ -41,7 +46,7 @@ export function getSpacingAttrKey( mode, side, device ) {
 }
 
 /**
- * @param {'padding'|'margin'|'border'|'borderHover'} mode
+ * @param {'padding'|'margin'|'border'|'borderHover'|'borderRadius'|'borderRadiusHover'} mode
  * @return {string}
  */
 export function getSpacingUnitKey( mode ) {
@@ -57,11 +62,17 @@ export function getSpacingUnitKey( mode ) {
 	if ( mode === 'borderHover' ) {
 		return 'cbBorderHoverUnit';
 	}
+	if ( mode === 'borderRadius' ) {
+		return 'cbBorderRadiusUnit';
+	}
+	if ( mode === 'borderRadiusHover' ) {
+		return 'cbBorderRadiusHoverUnit';
+	}
 	return 'cbMarginUnit';
 }
 
 /**
- * @param {'padding'|'margin'|'border'|'borderHover'} mode
+ * @param {'padding'|'margin'|'border'|'borderHover'|'borderRadius'|'borderRadiusHover'} mode
  * @return {string}
  */
 export function getSpacingLinkedKey( mode ) {
@@ -76,6 +87,12 @@ export function getSpacingLinkedKey( mode ) {
 	}
 	if ( mode === 'borderHover' ) {
 		return 'cbBorderHoverLinked';
+	}
+	if ( mode === 'borderRadius' ) {
+		return 'cbBorderRadiusLinked';
+	}
+	if ( mode === 'borderRadiusHover' ) {
+		return 'cbBorderRadiusHoverLinked';
 	}
 	return 'cbMarginLinked';
 }
@@ -101,7 +118,7 @@ export function parseSpacingValue( raw ) {
 /**
  * @param {string} num
  * @param {string} unit
- * @param {'padding'|'margin'|'border'|'borderHover'|undefined} mode Padding/border widths cannot be negative; margin can.
+ * @param {'padding'|'margin'|'border'|'borderHover'|'borderRadius'|'borderRadiusHover'|undefined} mode Padding/border widths cannot be negative; margin can.
  * @return {string} Never empty — blanks become 0 with unit (consistent CSS vars).
  */
 export function formatSpacingValue( num, unit, mode ) {
@@ -113,7 +130,9 @@ export function formatSpacingValue( num, unit, mode ) {
 	const nonNegative =
 		mode === 'padding' ||
 		mode === 'border' ||
-		mode === 'borderHover';
+		mode === 'borderHover' ||
+		mode === 'borderRadius' ||
+		mode === 'borderRadiusHover';
 	if ( nonNegative ) {
 		const parsed = parseFloat( n );
 		if ( Number.isFinite( parsed ) && parsed < 0 ) {
@@ -246,6 +265,54 @@ export function getBorderCssVarsForEditor( attributes ) {
 
 	emitWidths( 'border', 'border' );
 	emitWidths( 'borderHover', 'border-hover' );
+
+	const emitRadiusWidths = ( mode, cssBase ) => {
+		const unitKey =
+			mode === 'borderRadius'
+				? 'cbBorderRadiusUnit'
+				: 'cbBorderRadiusHoverUnit';
+		const unit = attributes[ unitKey ] || 'px';
+
+		for ( const { id, suffix } of devices ) {
+			const keys = SPACING_SIDES.map( ( side ) =>
+				getSpacingAttrKey( mode, side, id )
+			);
+			const hasAny = keys.some( ( k ) => {
+				const v = attributes[ k ];
+				return (
+					v !== undefined &&
+					v !== null &&
+					String( v ).trim() !== ''
+				);
+			} );
+			if ( ! hasAny ) {
+				continue;
+			}
+			for ( const side of SPACING_SIDES ) {
+				const key = getSpacingAttrKey( mode, side, id );
+				const sideLower = side.toLowerCase();
+				const raw = attributes[ key ];
+				const trimmed =
+					raw !== undefined &&
+					raw !== null &&
+					String( raw ).trim() !== ''
+						? String( raw ).trim()
+						: '';
+				const { num } = parseSpacingValue(
+					trimmed || `0${ unit }`
+				);
+				const val = formatSpacingValue(
+					num === '' ? '0' : num,
+					unit,
+					mode
+				);
+				out[ `--cb-${ cssBase }-${ sideLower }${ suffix }` ] = val;
+			}
+		}
+	};
+
+	emitRadiusWidths( 'borderRadius', 'border-radius' );
+	emitRadiusWidths( 'borderRadiusHover', 'border-hover-radius' );
 
 	const style = attributes.cbBorderStyle;
 	if ( style !== undefined && style !== null && String( style ).trim() !== '' ) {

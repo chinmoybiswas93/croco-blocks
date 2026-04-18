@@ -1,6 +1,7 @@
 import { SelectControl, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { ResponsiveSpacingControl } from '../ResponsiveSpacingControl/ResponsiveSpacingControl';
+import { BorderRadiusControl } from '../BorderRadiusControl/BorderRadiusControl';
 import { ColorOpacityControl } from '../ColorOpacityControl/ColorOpacityControl';
 import './BorderControls.scss';
 
@@ -125,6 +126,13 @@ export const BorderControls = ( {
 											}
 										/>
 									</div>
+									<div className="croco-blocks-advanced-controls__section croco-blocks-advanced-controls__section--nested">
+										<BorderRadiusControl
+											mode="borderRadius"
+											attributes={ attributes }
+											setAttributes={ setAttributes }
+										/>
+									</div>
 								</>
 							) }
 						</div>
@@ -176,6 +184,13 @@ export const BorderControls = ( {
 														value || '',
 												} )
 											}
+										/>
+									</div>
+									<div className="croco-blocks-advanced-controls__section croco-blocks-advanced-controls__section--nested">
+										<BorderRadiusControl
+											mode="borderRadiusHover"
+											attributes={ attributes }
+											setAttributes={ setAttributes }
 										/>
 									</div>
 								</>

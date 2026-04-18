@@ -168,3 +168,166 @@ $cb-spacing-bp-desktop: 960px !default;
 	);
 	border-color: var(--cb-border-hover-color, var(--cb-border-color, currentColor));
 }
+
+/* Top/Right/Bottom/Left map to TL / TR / BR / BL corners (same labels as spacing). */
+@mixin croco-blocks-border-radius-mobile {
+	border-top-left-radius: var(
+		--cb-border-radius-top-mobile,
+		var(--cb-border-radius-top-tablet, var(--cb-border-radius-top, 0))
+	);
+	border-top-right-radius: var(
+		--cb-border-radius-right-mobile,
+		var(--cb-border-radius-right-tablet, var(--cb-border-radius-right, 0))
+	);
+	border-bottom-right-radius: var(
+		--cb-border-radius-bottom-mobile,
+		var(--cb-border-radius-bottom-tablet, var(--cb-border-radius-bottom, 0))
+	);
+	border-bottom-left-radius: var(
+		--cb-border-radius-left-mobile,
+		var(--cb-border-radius-left-tablet, var(--cb-border-radius-left, 0))
+	);
+}
+
+@mixin croco-blocks-border-radius-tablet {
+	border-top-left-radius: var(
+		--cb-border-radius-top-tablet,
+		var(--cb-border-radius-top, 0)
+	);
+	border-top-right-radius: var(
+		--cb-border-radius-right-tablet,
+		var(--cb-border-radius-right, 0)
+	);
+	border-bottom-right-radius: var(
+		--cb-border-radius-bottom-tablet,
+		var(--cb-border-radius-bottom, 0)
+	);
+	border-bottom-left-radius: var(
+		--cb-border-radius-left-tablet,
+		var(--cb-border-radius-left, 0)
+	);
+}
+
+@mixin croco-blocks-border-radius-desktop {
+	border-top-left-radius: var(--cb-border-radius-top, 0);
+	border-top-right-radius: var(--cb-border-radius-right, 0);
+	border-bottom-right-radius: var(--cb-border-radius-bottom, 0);
+	border-bottom-left-radius: var(--cb-border-radius-left, 0);
+}
+
+@mixin croco-blocks-border-hover-radius-mobile {
+	border-top-left-radius: var(
+		--cb-border-hover-radius-top-mobile,
+		var(
+			--cb-border-hover-radius-top-tablet,
+			var(
+				--cb-border-hover-radius-top,
+				var(
+					--cb-border-radius-top-mobile,
+					var(
+						--cb-border-radius-top-tablet,
+						var(--cb-border-radius-top, 0)
+					)
+				)
+			)
+		)
+	);
+	border-top-right-radius: var(
+		--cb-border-hover-radius-right-mobile,
+		var(
+			--cb-border-hover-radius-right-tablet,
+			var(
+				--cb-border-hover-radius-right,
+				var(
+					--cb-border-radius-right-mobile,
+					var(
+						--cb-border-radius-right-tablet,
+						var(--cb-border-radius-right, 0)
+					)
+				)
+			)
+		)
+	);
+	border-bottom-right-radius: var(
+		--cb-border-hover-radius-bottom-mobile,
+		var(
+			--cb-border-hover-radius-bottom-tablet,
+			var(
+				--cb-border-hover-radius-bottom,
+				var(
+					--cb-border-radius-bottom-mobile,
+					var(
+						--cb-border-radius-bottom-tablet,
+						var(--cb-border-radius-bottom, 0)
+					)
+				)
+			)
+		)
+	);
+	border-bottom-left-radius: var(
+		--cb-border-hover-radius-left-mobile,
+		var(
+			--cb-border-hover-radius-left-tablet,
+			var(
+				--cb-border-hover-radius-left,
+				var(
+					--cb-border-radius-left-mobile,
+					var(
+						--cb-border-radius-left-tablet,
+						var(--cb-border-radius-left, 0)
+					)
+				)
+			)
+		)
+	);
+}
+
+@mixin croco-blocks-border-hover-radius-tablet {
+	border-top-left-radius: var(
+		--cb-border-hover-radius-top-tablet,
+		var(
+			--cb-border-hover-radius-top,
+			var(--cb-border-radius-top-tablet, var(--cb-border-radius-top, 0))
+		)
+	);
+	border-top-right-radius: var(
+		--cb-border-hover-radius-right-tablet,
+		var(
+			--cb-border-hover-radius-right,
+			var(--cb-border-radius-right-tablet, var(--cb-border-radius-right, 0))
+		)
+	);
+	border-bottom-right-radius: var(
+		--cb-border-hover-radius-bottom-tablet,
+		var(
+			--cb-border-hover-radius-bottom,
+			var(--cb-border-radius-bottom-tablet, var(--cb-border-radius-bottom, 0))
+		)
+	);
+	border-bottom-left-radius: var(
+		--cb-border-hover-radius-left-tablet,
+		var(
+			--cb-border-hover-radius-left,
+			var(--cb-border-radius-left-tablet, var(--cb-border-radius-left, 0))
+		)
+	);
+}
+
+@mixin croco-blocks-border-hover-radius-desktop {
+	border-top-left-radius: var(
+		--cb-border-hover-radius-top,
+		var(--cb-border-radius-top, 0)
+	);
+	border-top-right-radius: var(
+		--cb-border-hover-radius-right,
+		var(--cb-border-radius-right, 0)
+	);
+	border-bottom-right-radius: var(
+		--cb-border-hover-radius-bottom,
+		var(--cb-border-radius-bottom, 0)
+	);
+	border-bottom-left-radius: var(
+		--cb-border-hover-radius-left,
+		var(--cb-border-radius-left, 0)
+	);
+}

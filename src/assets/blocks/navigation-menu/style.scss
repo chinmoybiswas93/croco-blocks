@@ -654,33 +654,39 @@ nav.wp-block-croco-blocks-navigation-menu {
 .wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 	@include croco-blocks-border-widths-mobile;
 	@include croco-blocks-border-base-styles;
+	@include croco-blocks-border-radius-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
 	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 		@include croco-blocks-border-widths-tablet;
+		@include croco-blocks-border-radius-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
 	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 		@include croco-blocks-border-widths-desktop;
+		@include croco-blocks-border-radius-desktop;
 	}
 }
 
 .wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root):hover {
 	@include croco-blocks-border-hover-widths-mobile;
 	@include croco-blocks-border-hover-base-styles;
+	@include croco-blocks-border-hover-radius-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
 	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root):hover {
 		@include croco-blocks-border-hover-widths-tablet;
+		@include croco-blocks-border-hover-radius-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
 	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root):hover {
 		@include croco-blocks-border-hover-widths-desktop;
+		@include croco-blocks-border-hover-radius-desktop;
 	}
 }

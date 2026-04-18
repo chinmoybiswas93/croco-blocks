@@ -32,7 +32,7 @@ class SpacingCss {
 	 * @return string
 	 */
 	public static function zero_with_unit( $unit ) {
-		$allowed = array( 'px', 'rem', 'em', 'vh', 'vw' );
+		$allowed = array( 'px', 'rem', 'em', '%', 'vh', 'vw' );
 		$u       = is_string( $unit ) && in_array( $unit, $allowed, true ) ? $unit : 'px';
 		return '0' . $u;
 	}
@@ -200,6 +200,57 @@ class SpacingCss {
 			$attr_prefix = $wg['attr_prefix'];
 			$css_prefix  = $wg['css_prefix'];
 			$unit_key    = 'cbBorder' === $attr_prefix ? 'cbBorderUnit' : 'cbBorderHoverUnit';
+			$unit        = isset( $attributes[ $unit_key ] ) ? $attributes[ $unit_key ] : 'px';
+			$zero        = self::zero_with_unit( is_string( $unit ) ? $unit : 'px' );
+
+			foreach ( $breakpoints as $bp ) {
+				$key_suffix = $bp['key_suffix'];
+				$attr_keys  = array();
+				foreach ( $sides as $side ) {
+					$attr_keys[] = $attr_prefix . $side . $key_suffix;
+				}
+
+				$has_any = false;
+				foreach ( $attr_keys as $k ) {
+					if ( self::attr_has_value( $attributes, $k ) ) {
+						$has_any = true;
+						break;
+					}
+				}
+				if ( ! $has_any ) {
+					continue;
+				}
+
+				foreach ( $sides as $side ) {
+					$key        = $attr_prefix . $side . $key_suffix;
+					$side_lower = strtolower( $side );
+					$var_name   = '--cb-' . $css_prefix . '-' . $side_lower . $bp['css_suffix'];
+					$val        = self::attr_has_value( $attributes, $key )
+						? trim( (string) $attributes[ $key ] )
+						: $zero;
+					$val        = self::normalize_value_for_mode( $val, 'padding', $zero );
+					$parts[]    = $var_name . ':' . esc_attr( $val );
+				}
+			}
+		}
+
+		$radius_groups = array(
+			array(
+				'attr_prefix' => 'cbBorderRadius',
+				'css_prefix'  => 'border-radius',
+				'unit_key'    => 'cbBorderRadiusUnit',
+			),
+			array(
+				'attr_prefix' => 'cbBorderRadiusHover',
+				'css_prefix'  => 'border-hover-radius',
+				'unit_key'    => 'cbBorderRadiusHoverUnit',
+			),
+		);
+
+		foreach ( $radius_groups as $rg ) {
+			$attr_prefix = $rg['attr_prefix'];
+			$css_prefix  = $rg['css_prefix'];
+			$unit_key    = $rg['unit_key'];
 			$unit        = isset( $attributes[ $unit_key ] ) ? $attributes[ $unit_key ] : 'px';
 			$zero        = self::zero_with_unit( is_string( $unit ) ? $unit : 'px' );
 

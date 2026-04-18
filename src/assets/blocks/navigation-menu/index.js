@@ -12,7 +12,7 @@ import {
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
 import ServerSideRender from '@wordpress/server-side-render';
 import metadata from './block.json';
 import {
@@ -108,6 +108,56 @@ registerBlockType( metadata.name, {
 						...getAdvancedBackgroundStyle( attributes ),
 				  },
 		} );
+
+		// #region agent log
+		useEffect( () => {
+			const el = instanceStyleRef?.current;
+			if ( ! el || typeof window === 'undefined' ) {
+				return;
+			}
+			const win = el.ownerDocument?.defaultView;
+			const cs = win?.getComputedStyle( el );
+			const firstLink = el.querySelector(
+				'a'
+			);
+			const csLink = firstLink
+				? win?.getComputedStyle( firstLink )
+				: null;
+			const inline = el.getAttribute( 'style' ) || '';
+			fetch(
+				'http://127.0.0.1:7639/ingest/8224dffe-4602-47a3-91ed-072c2b303295',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-Debug-Session-Id': '6dad28',
+					},
+					body: JSON.stringify( {
+						sessionId: '6dad28',
+						runId: 'editor-nav-advanced',
+						hypothesisId: 'H1-H5',
+						location: 'navigation-menu/index.js:edit',
+						message: 'Computed styles: block root vs first link',
+						data: {
+							useExternalInstanceCss,
+							hasNav: !! el.querySelector( 'nav' ),
+							rootBorderTopLeftRadius: cs?.borderTopLeftRadius,
+							rootBorderRadius: cs?.borderRadius,
+							rootBackgroundColor: cs?.backgroundColor,
+							rootOverflow: cs?.overflow,
+							inlineHasRadiusVar: inline.includes(
+								'--cb-border-radius'
+							),
+							inlineHasBg: inline.includes( 'background' ),
+							linkBg: csLink?.backgroundColor,
+							linkBorderRadius: csLink?.borderTopLeftRadius,
+						},
+						timestamp: Date.now(),
+					} ),
+				}
+			).catch( () => {} );
+		}, [ attributes, useExternalInstanceCss ] );
+		// #endregion
 
 		const menus = useSelect(
 			( select ) =>
