@@ -8,3 +8,4 @@ import '../components/controls/ResponsiveAlignmentControl/ResponsiveAlignmentCon
 import '../components/controls/ResponsiveUnitControl/ResponsiveUnitControl.scss';
 import '../components/controls/ColorOpacityControl/ColorOpacityControl.scss';
 import '../components/controls/ResponsiveSpacingControl/ResponsiveSpacingControl.scss';
+import '../components/controls/BorderControls/BorderControls.scss';

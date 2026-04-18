@@ -1,7 +1,7 @@
 import { SelectControl, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { ResponsiveSpacingControl } from '../../controls/ResponsiveSpacingControl/ResponsiveSpacingControl';
-import { ColorOpacityControl } from '../../controls/ColorOpacityControl/ColorOpacityControl';
+import { ResponsiveSpacingControl } from '../ResponsiveSpacingControl/ResponsiveSpacingControl';
+import { ColorOpacityControl } from '../ColorOpacityControl/ColorOpacityControl';
 import './BorderControls.scss';
 
 const TAB_NORMAL = 'normal';
@@ -36,6 +36,8 @@ function borderStyleShowsDetails( style ) {
 }
 
 /**
+ * Responsive border (normal + hover) for the Advanced inspector tab. Reusable anywhere `attributes` / `setAttributes` match cbBorder* keys.
+ *
  * @param {Object} props
  * @param {Object} props.attributes
  * @param {Function} props.setAttributes

@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { ResponsiveSpacingControl } from '../../controls/ResponsiveSpacingControl/ResponsiveSpacingControl';
 import { ColorOpacityControl } from '../../controls/ColorOpacityControl/ColorOpacityControl';
-import { BorderControls } from './BorderControls';
+import { BorderControls } from '../../controls/BorderControls/BorderControls';
 
 export const AdvancedControls = ( { attributes, setAttributes } ) => {
 	return (
