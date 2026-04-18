@@ -480,3 +480,46 @@
 		@include croco-blocks-border-hover-radius-desktop;
 	}
 }
+
+/*
+ * Editor canvas only: outer useBlockProps + editor.scss apply Advanced spacing/border on
+ * .croco-blocks-ssr-editor-root. SSR inner get_block_wrapper_attributes() repeats
+ * wp-block-croco-blocks-hero-slider, so rules above would duplicate — extra padding and
+ * borders vs front end. Strip Advanced longhands from the inner node.
+ */
+.croco-blocks-ssr-editor-root
+	.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root),
+.croco-blocks-ssr-editor-root
+	.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root):hover {
+	margin: 0;
+	padding: 0;
+	border-style: none;
+	border-width: 0;
+	border-radius: 0;
+}
+
+@media (min-width: $cb-spacing-bp-tablet) {
+	.croco-blocks-ssr-editor-root
+		.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root),
+	.croco-blocks-ssr-editor-root
+		.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root):hover {
+		margin: 0;
+		padding: 0;
+		border-style: none;
+		border-width: 0;
+		border-radius: 0;
+	}
+}
+
+@media (min-width: $cb-spacing-bp-desktop) {
+	.croco-blocks-ssr-editor-root
+		.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root),
+	.croco-blocks-ssr-editor-root
+		.wp-block-croco-blocks-hero-slider:not(.croco-blocks-ssr-editor-root):hover {
+		margin: 0;
+		padding: 0;
+		border-style: none;
+		border-width: 0;
+		border-radius: 0;
+	}
+}

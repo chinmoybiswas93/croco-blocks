@@ -98,78 +98,63 @@
 }
 
 /*
- * SSR wrapper only (no hero root yet): spacing + border previews. Editor bundle only
- * (not shipped in style-index.css on the public frontend).
+ * Editor block root (croco-blocks-ssr-editor-root): map Advanced tab CSS variables to
+ * longhands on the same element that receives inline styles. Must run whether SSR output
+ * is present or not; :has() gating left the root without border-radius longhands while
+ * background-color still applied (square fill vs rounded border in the canvas).
+ * Not shipped in style-index.css on the public frontend.
  */
-.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-		:has(.wp-block-croco-blocks-hero-slider)
-	) {
+.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root {
 	@include croco-blocks-spacing-longhands-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
-	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-			:has(.wp-block-croco-blocks-hero-slider)
-		) {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root {
 		@include croco-blocks-spacing-longhands-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
-	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-			:has(.wp-block-croco-blocks-hero-slider)
-		) {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root {
 		@include croco-blocks-spacing-longhands-desktop;
 	}
 }
 
-.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-		:has(.wp-block-croco-blocks-hero-slider)
-	) {
+.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root {
 	@include croco-blocks-border-widths-mobile;
 	@include croco-blocks-border-base-styles;
 	@include croco-blocks-border-radius-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
-	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-			:has(.wp-block-croco-blocks-hero-slider)
-		) {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root {
 		@include croco-blocks-border-widths-tablet;
 		@include croco-blocks-border-radius-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
-	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-			:has(.wp-block-croco-blocks-hero-slider)
-		) {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root {
 		@include croco-blocks-border-widths-desktop;
 		@include croco-blocks-border-radius-desktop;
 	}
 }
 
-.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-		:has(.wp-block-croco-blocks-hero-slider)
-	):hover {
+.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:hover {
 	@include croco-blocks-border-hover-widths-mobile;
 	@include croco-blocks-border-hover-base-styles;
 	@include croco-blocks-border-hover-radius-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
-	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-			:has(.wp-block-croco-blocks-hero-slider)
-		):hover {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:hover {
 		@include croco-blocks-border-hover-widths-tablet;
 		@include croco-blocks-border-hover-radius-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
-	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:not(
-			:has(.wp-block-croco-blocks-hero-slider)
-		):hover {
+	.wp-block-croco-blocks-hero-slider.croco-blocks-ssr-editor-root:hover {
 		@include croco-blocks-border-hover-widths-desktop;
 		@include croco-blocks-border-hover-radius-desktop;
 	}
