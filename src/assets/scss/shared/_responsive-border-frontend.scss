@@ -1,0 +1,170 @@
+/**
+ * Advanced tab border: --cb-border-* and --cb-border-hover-* custom properties.
+ * Breakpoints match _responsive-spacing-frontend.scss.
+ */
+
+$cb-spacing-bp-tablet: 782px !default;
+$cb-spacing-bp-desktop: 960px !default;
+
+@mixin croco-blocks-border-widths-mobile {
+	border-top-width: var(
+		--cb-border-top-mobile,
+		var(--cb-border-top-tablet, var(--cb-border-top, 0))
+	);
+	border-right-width: var(
+		--cb-border-right-mobile,
+		var(--cb-border-right-tablet, var(--cb-border-right, 0))
+	);
+	border-bottom-width: var(
+		--cb-border-bottom-mobile,
+		var(--cb-border-bottom-tablet, var(--cb-border-bottom, 0))
+	);
+	border-left-width: var(
+		--cb-border-left-mobile,
+		var(--cb-border-left-tablet, var(--cb-border-left, 0))
+	);
+}
+
+@mixin croco-blocks-border-widths-tablet {
+	border-top-width: var(--cb-border-top-tablet, var(--cb-border-top, 0));
+	border-right-width: var(--cb-border-right-tablet, var(--cb-border-right, 0));
+	border-bottom-width: var(--cb-border-bottom-tablet, var(--cb-border-bottom, 0));
+	border-left-width: var(--cb-border-left-tablet, var(--cb-border-left, 0));
+}
+
+@mixin croco-blocks-border-widths-desktop {
+	border-top-width: var(--cb-border-top, 0);
+	border-right-width: var(--cb-border-right, 0);
+	border-bottom-width: var(--cb-border-bottom, 0);
+	border-left-width: var(--cb-border-left, 0);
+}
+
+@mixin croco-blocks-border-hover-widths-mobile {
+	border-top-width: var(
+		--cb-border-hover-top-mobile,
+		var(
+			--cb-border-hover-top-tablet,
+			var(
+				--cb-border-hover-top,
+				var(
+					--cb-border-top-mobile,
+					var(
+						--cb-border-top-tablet,
+						var(--cb-border-top, 0)
+					)
+				)
+			)
+		)
+	);
+	border-right-width: var(
+		--cb-border-hover-right-mobile,
+		var(
+			--cb-border-hover-right-tablet,
+			var(
+				--cb-border-hover-right,
+				var(
+					--cb-border-right-mobile,
+					var(
+						--cb-border-right-tablet,
+						var(--cb-border-right, 0)
+					)
+				)
+			)
+		)
+	);
+	border-bottom-width: var(
+		--cb-border-hover-bottom-mobile,
+		var(
+			--cb-border-hover-bottom-tablet,
+			var(
+				--cb-border-hover-bottom,
+				var(
+					--cb-border-bottom-mobile,
+					var(
+						--cb-border-bottom-tablet,
+						var(--cb-border-bottom, 0)
+					)
+				)
+			)
+		)
+	);
+	border-left-width: var(
+		--cb-border-hover-left-mobile,
+		var(
+			--cb-border-hover-left-tablet,
+			var(
+				--cb-border-hover-left,
+				var(
+					--cb-border-left-mobile,
+					var(
+						--cb-border-left-tablet,
+						var(--cb-border-left, 0)
+					)
+				)
+			)
+		)
+	);
+}
+
+@mixin croco-blocks-border-hover-widths-tablet {
+	border-top-width: var(
+		--cb-border-hover-top-tablet,
+		var(
+			--cb-border-hover-top,
+			var(--cb-border-top-tablet, var(--cb-border-top, 0))
+		)
+	);
+	border-right-width: var(
+		--cb-border-hover-right-tablet,
+		var(
+			--cb-border-hover-right,
+			var(--cb-border-right-tablet, var(--cb-border-right, 0))
+		)
+	);
+	border-bottom-width: var(
+		--cb-border-hover-bottom-tablet,
+		var(
+			--cb-border-hover-bottom,
+			var(--cb-border-bottom-tablet, var(--cb-border-bottom, 0))
+		)
+	);
+	border-left-width: var(
+		--cb-border-hover-left-tablet,
+		var(
+			--cb-border-hover-left,
+			var(--cb-border-left-tablet, var(--cb-border-left, 0))
+		)
+	);
+}
+
+@mixin croco-blocks-border-hover-widths-desktop {
+	border-top-width: var(
+		--cb-border-hover-top,
+		var(--cb-border-top, 0)
+	);
+	border-right-width: var(
+		--cb-border-hover-right,
+		var(--cb-border-right, 0)
+	);
+	border-bottom-width: var(
+		--cb-border-hover-bottom,
+		var(--cb-border-bottom, 0)
+	);
+	border-left-width: var(
+		--cb-border-hover-left,
+		var(--cb-border-left, 0)
+	);
+}
+
+@mixin croco-blocks-border-base-styles {
+	border-style: var(--cb-border-style, none);
+	border-color: var(--cb-border-color, currentColor);
+}
+
+@mixin croco-blocks-border-hover-base-styles {
+	border-style: var(
+		--cb-border-hover-style,
+		var(--cb-border-style, none)
+	);
+	border-color: var(--cb-border-hover-color, var(--cb-border-color, currentColor));
+}

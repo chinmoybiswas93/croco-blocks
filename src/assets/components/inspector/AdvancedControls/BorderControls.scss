@@ -1,0 +1,62 @@
+.croco-blocks-border-controls {
+	margin-bottom: 1rem;
+
+	.croco-blocks-advanced-controls__section-title {
+		display: block;
+		margin-bottom: 8px;
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1.4;
+		color: #1e1e1e;
+	}
+
+	&__tabs {
+		.components-tab-panel__tabs {
+			display: flex;
+			gap: 0;
+			margin-bottom: 12px;
+			border: 1px solid #949494;
+			border-radius: 2px;
+			overflow: hidden;
+			background: #f0f0f1;
+
+			button {
+				flex: 1;
+				justify-content: center;
+				border: none !important;
+				border-radius: 0 !important;
+				box-shadow: none !important;
+				min-height: 32px;
+				font-size: 13px;
+
+				&.is-active {
+					background: #fff;
+					font-weight: 600;
+				}
+			}
+		}
+
+		.components-tab-panel__tab-content {
+			margin-top: 0;
+		}
+	}
+
+	&__panel {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	&__field {
+		margin-bottom: 12px;
+
+		.components-base-control {
+			margin-bottom: 0 !important;
+		}
+	}
+
+	.croco-blocks-advanced-controls__section--nested {
+		margin-bottom: 0.75rem;
+		padding-top: 0;
+	}
+}

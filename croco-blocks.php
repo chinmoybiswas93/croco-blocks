@@ -27,4 +27,4 @@ if ( file_exists( CROCO_BLOCKS_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
 	require_once CROCO_BLOCKS_PLUGIN_DIR . 'vendor/autoload.php';
 }
 
-CrocoBlocks\Plugin::init();
+require_once CROCO_BLOCKS_PLUGIN_DIR . 'src/Core/Bootstrap.php';

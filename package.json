@@ -3,8 +3,8 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"build": "wp-scripts build",
-		"start": "wp-scripts start"
+		"build": "WP_SOURCE_PATH=src/assets wp-scripts build",
+		"start": "WP_SOURCE_PATH=src/assets wp-scripts start"
 	},
 	"devDependencies": {
 		"@wordpress/icons": "^12.1.0",

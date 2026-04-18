@@ -1,10 +1,12 @@
 const path = require( 'path' );
 const wpConfig = require( '@wordpress/scripts/config/webpack.config' );
 
-const adminEntry = path.resolve( __dirname, 'src/admin/index.js' );
+const sourcePath = process.env.WP_SOURCE_PATH || 'src/assets';
+
+const adminEntry = path.resolve( __dirname, `${ sourcePath }/admin/index.js` );
 const editorSharedEntry = path.resolve(
 	__dirname,
-	'src/editor-shared/index.js'
+	`${ sourcePath }/editor-shared/index.js`
 );
 
 function addAdminEntry( config ) {
