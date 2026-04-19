@@ -18,6 +18,122 @@ function navAlignmentToJustify( alignment ) {
 	}
 }
 
+function sanitizeMenuItemFontSizeUnit( unit ) {
+	const u = String( unit || 'px' ).toLowerCase().trim();
+	return [ 'px', 'rem', 'em', '%' ].includes( u ) ? u : 'px';
+}
+
+function fontSizeFromNumber( n, unit ) {
+	const v = parseFloat( String( n ), 10 );
+	if ( ! Number.isFinite( v ) || v <= 0 ) {
+		return '';
+	}
+	return `${ v }${ sanitizeMenuItemFontSizeUnit( unit ) }`;
+}
+
+function menuItemFontSizesFromAttributes( attrs ) {
+	const u = sanitizeMenuItemFontSizeUnit( attrs.menuItemFontSizeUnit );
+	const d = attrs.menuItemFontSizeDesktop ?? 0;
+	const t = attrs.menuItemFontSizeTablet ?? 0;
+	const m = attrs.menuItemFontSizeMobile ?? 0;
+	const legacy = ( attrs.menuItemFontSize || '' ).trim().replace( /\s+/g, '' );
+	const dNum = parseFloat( String( d ), 10 );
+	if ( ( ! Number.isFinite( dNum ) || dNum <= 0 ) && legacy ) {
+		return {
+			desktop: legacy,
+			tablet: '',
+			mobile: '',
+		};
+	}
+	return {
+		desktop: fontSizeFromNumber( d, u ),
+		tablet: fontSizeFromNumber( t, u ),
+		mobile: fontSizeFromNumber( m, u ),
+	};
+}
+
+/**
+ * @param {number|string|undefined} value
+ * @param {string|undefined}        unit
+ * @param {boolean|undefined}       explicitSet false = theme default; true = emit value including 0; undefined = legacy (same as before explicit Set attr).
+ */
+function menuItemLineHeightCss( value, unit, explicitSet ) {
+	if ( explicitSet === false ) {
+		return '';
+	}
+	const v = parseFloat( String( value ), 10 );
+	if ( ! Number.isFinite( v ) ) {
+		return '';
+	}
+	if ( explicitSet === undefined ) {
+		if ( v <= 0 ) {
+			return '';
+		}
+	} else if ( explicitSet === true && v < 0 ) {
+		return '';
+	}
+	let u = String( unit || '' ).toLowerCase().trim();
+	if ( ! [ '', 'px', 'em', 'rem' ].includes( u ) ) {
+		u = '';
+	}
+	if ( u === '' ) {
+		return String( v );
+	}
+	return `${ v }${ u }`;
+}
+
+function sanitizeMenuItemLetterSpacingLoose( raw ) {
+	if ( ! raw || typeof raw !== 'string' ) {
+		return '';
+	}
+	const value = raw.trim();
+	if ( value === '' ) {
+		return '';
+	}
+	const lower = value.toLowerCase();
+	if ( [ 'normal', 'inherit', 'initial', 'unset' ].includes( lower ) ) {
+		return lower;
+	}
+	const compact = value.replace( /\s+/g, '' );
+	if ( /^-?[\d.]+\s*(px|rem|em|%)$/i.test( compact ) ) {
+		return compact;
+	}
+	return '';
+}
+
+function menuItemLetterSpacingMerged( attrs ) {
+	const legacy = ( attrs.menuItemLetterSpacing || '' ).trim();
+	const val = parseFloat( String( attrs.menuItemLetterSpacingValue ?? 0 ), 10 );
+	let u = String( attrs.menuItemLetterSpacingUnit || 'em' ).toLowerCase().trim();
+	if ( ! [ 'px', 'em', 'rem', '%' ].includes( u ) ) {
+		u = 'em';
+	}
+	const hasExplicit = Object.prototype.hasOwnProperty.call(
+		attrs,
+		'menuItemLetterSpacingSet'
+	);
+	if ( hasExplicit ) {
+		if ( attrs.menuItemLetterSpacingSet === false ) {
+			return legacy
+				? sanitizeMenuItemLetterSpacingLoose( legacy )
+				: '';
+		}
+		if ( attrs.menuItemLetterSpacingSet === true ) {
+			if ( ! Number.isFinite( val ) ) {
+				return '';
+			}
+			return sanitizeMenuItemLetterSpacingLoose( `${ val }${ u }` );
+		}
+	}
+	if ( Number.isFinite( val ) && val !== 0 ) {
+		return sanitizeMenuItemLetterSpacingLoose( `${ val }${ u }` );
+	}
+	if ( legacy ) {
+		return sanitizeMenuItemLetterSpacingLoose( legacy );
+	}
+	return '';
+}
+
 /**
  * @param {Object} a
  * @return {string}
@@ -156,6 +272,65 @@ export function buildNavigationMenuStyleDeclarationsString( a ) {
 
 	if ( menu_item_padding_vertical ) {
 		style += `--cb-navigation-menu-item-padding-vertical:${ String( menu_item_padding_vertical ) };`;
+	}
+
+	const menu_item_text_color = a.menuItemTextColor || '';
+	const menu_item_text_hover_color = a.menuItemTextHoverColor || '';
+	const menu_item_font_weight = a.menuItemFontWeight || '';
+	const menu_item_font_sizes = menuItemFontSizesFromAttributes( a );
+	const menu_item_line_height = menuItemLineHeightCss(
+		a.menuItemLineHeight,
+		a.menuItemLineHeightUnit,
+		Object.prototype.hasOwnProperty.call( a, 'menuItemLineHeightSet' )
+			? a.menuItemLineHeightSet
+			: undefined
+	);
+	const menu_item_letter_spacing = menuItemLetterSpacingMerged( a );
+
+	if ( menu_item_text_color ) {
+		style += `--cb-navigation-menu-item-text-color:${ String( menu_item_text_color ) };`;
+	}
+
+	if ( menu_item_text_hover_color ) {
+		style += `--cb-navigation-menu-item-text-hover-color:${ String(
+			menu_item_text_hover_color
+		) };`;
+	}
+
+	if ( menu_item_font_sizes.desktop ) {
+		style += `--cb-navigation-menu-item-font-size:${ String(
+			menu_item_font_sizes.desktop
+		) };`;
+	}
+
+	if ( menu_item_font_sizes.tablet ) {
+		style += `--cb-navigation-menu-item-font-size-tablet:${ String(
+			menu_item_font_sizes.tablet
+		) };`;
+	}
+
+	if ( menu_item_font_sizes.mobile ) {
+		style += `--cb-navigation-menu-item-font-size-mobile:${ String(
+			menu_item_font_sizes.mobile
+		) };`;
+	}
+
+	if ( menu_item_font_weight ) {
+		style += `--cb-navigation-menu-item-font-weight:${ String(
+			menu_item_font_weight
+		) };`;
+	}
+
+	if ( menu_item_line_height ) {
+		style += `--cb-navigation-menu-item-line-height:${ String(
+			menu_item_line_height
+		) };`;
+	}
+
+	if ( menu_item_letter_spacing ) {
+		style += `--cb-navigation-menu-item-letter-spacing:${ String(
+			menu_item_letter_spacing
+		) };`;
 	}
 
 	style += `--cb-navigation-mobile-menu-text-color:${ String( mobile_menu_text_color ) };`;

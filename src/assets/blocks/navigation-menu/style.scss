@@ -35,6 +35,29 @@ nav.wp-block-croco-blocks-navigation-menu {
 			);
 	}
 
+	/* Desktop / horizontal top-level links only — not off-canvas. */
+	&__list:not(.cb-navigation__list--offcanvas) > li > a {
+		color: var(--cb-navigation-menu-item-text-color, inherit);
+		font-size: var(--cb-navigation-menu-item-font-size, inherit);
+		line-height: var(
+			--cb-navigation-menu-item-line-height,
+			normal
+		);
+		font-weight: var(--cb-navigation-menu-item-font-weight, inherit);
+		letter-spacing: var(
+			--cb-navigation-menu-item-letter-spacing,
+			normal
+		);
+	}
+
+	&__list:not(.cb-navigation__list--offcanvas) > li > a:hover,
+	&__list:not(.cb-navigation__list--offcanvas) > li > a:focus {
+		color: var(
+			--cb-navigation-menu-item-text-hover-color,
+			var(--cb-navigation-menu-item-text-color, inherit)
+		);
+	}
+
 	/* Top-level items that have children. */
 	.menu-item-has-children {
 		position: relative;
@@ -396,6 +419,13 @@ nav.wp-block-croco-blocks-navigation-menu {
 
 @media (max-width: 1024px) {
 	.cb-navigation {
+		&__list:not(.cb-navigation__list--offcanvas) > li > a {
+			font-size: var(
+				--cb-navigation-menu-item-font-size-tablet,
+				var(--cb-navigation-menu-item-font-size, inherit)
+			);
+		}
+
 		&__list {
 			justify-content: var(
 				--cb-navigation-justify-tablet,
@@ -432,6 +462,16 @@ nav.wp-block-croco-blocks-navigation-menu {
 
 @media (max-width: 768px) {
 	.cb-navigation {
+		&__list:not(.cb-navigation__list--offcanvas) > li > a {
+			font-size: var(
+				--cb-navigation-menu-item-font-size-mobile,
+				var(
+					--cb-navigation-menu-item-font-size-tablet,
+					var(--cb-navigation-menu-item-font-size, inherit)
+				)
+			);
+		}
+
 		&__list {
 			justify-content: var(
 				--cb-navigation-justify-mobile,

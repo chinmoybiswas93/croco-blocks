@@ -54,13 +54,13 @@
 	}
 }
 
-/* Match core block color indicator: one circle, same border as swatch row. */
+/* Color circle (checkerboard when empty). */
 .cb-color-opacity-control__swatch {
 	box-sizing: border-box;
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
-	border: 1px solid #c3c4c7;
+	border: 0.5px solid #000000;
 	flex-shrink: 0;
 }
 

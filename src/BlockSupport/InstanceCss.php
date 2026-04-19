@@ -162,13 +162,8 @@ class InstanceCss {
 		$editor_context = is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST );
 
 		if ( ! $editor_context ) {
-			static $emitted = array();
-			$fingerprint = $block_name . "\x1e" . $sel;
-			if ( ! isset( $emitted[ $fingerprint ] ) ) {
-				$emitted[ $fingerprint ] = true;
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe selector; declarations from escaped builders.
-				echo "\n" . '<style class="croco-blocks-instance-css">' . $sel . '{' . $declarations . '}</style>' . "\n";
-			}
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe selector; declarations from escaped builders.
+			echo "\n" . '<style class="croco-blocks-instance-css">' . $sel . '{' . $declarations . '}</style>' . "\n";
 		}
 
 		return true;

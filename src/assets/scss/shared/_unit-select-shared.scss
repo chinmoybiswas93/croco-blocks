@@ -1,0 +1,42 @@
+/**
+ * Shared native <select> styling for unit dropdowns
+ * (ResponsiveUnitControl + SliderUnitControl).
+ */
+@mixin croco-blocks-unit-select {
+	align-self: stretch;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #f0f0f0 !important;
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 10 6%27%3E%3Cpath fill=%27%23555%27 d=%27M5 6 0 0h10z%27/%3E%3C/svg%3E") !important;
+	background-position: right 4px center !important;
+	background-repeat: no-repeat !important;
+	background-size: 5px 3px !important;
+	border: none;
+	border-radius: 3px 2px 2px 3px;
+	box-shadow: none;
+	box-sizing: border-box;
+	color: #007cba;
+	cursor: pointer;
+	flex: 0 0 40px;
+	font-size: 10px;
+	line-height: 1.3;
+	margin: 2px;
+	max-width: 40px;
+	min-width: 40px;
+	padding: 5px;
+	width: 40px;
+
+	&:focus,
+	&:focus-visible {
+		outline: none;
+		box-shadow: none;
+	}
+
+	option {
+		padding: 4px 6px;
+		min-height: 1.5em;
+		line-height: 1.35;
+		font-size: 11px;
+	}
+}

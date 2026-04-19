@@ -1,3 +1,5 @@
+@import '../../../scss/shared/unit-select-shared';
+
 .cb-responsive-unit-control {
 	display: flex;
 	flex-direction: column;
@@ -18,40 +20,63 @@
 	font-weight: 500;
 }
 
+/* One outer border; number (white) + unit strip (grey) — matches SliderUnitControl */
 .cb-responsive-unit-control__input-wrapper {
 	flex: 1 1 auto;
 	display: flex;
-	align-items: center;
-	position: relative;
-	height: 34px;
-	padding: 5px 8px;
+	align-items: stretch;
+	min-height: 34px;
+	padding: 0;
 	border: 1px solid #757575;
 	border-radius: 2px;
 	background: #fff;
+	box-sizing: border-box;
+	overflow: hidden;
+
+	&:focus-within {
+		border-color: #757575;
+		box-shadow: none;
+		outline: none;
+	}
 }
 
 .cb-responsive-unit-control__input {
 	flex: 1 1 auto;
-	margin: 0;
+	min-width: 0;
+	margin: 0 !important;
 }
 
 .cb-responsive-unit-control__input .components-base-control__field {
 	height: 100%;
+	margin-bottom: 0 !important;
 }
 
-.cb-responsive-unit-control__input input.components-text-control__input {
-	min-width: 72px;
+/* Flat number field — reset UA + editor sidebar input styles */
+.cb-responsive-unit-control__input input.components-text-control__input[type='number'] {
+	min-width: 0;
+	width: 100%;
 	height: 100%;
-	padding: 5px;
-	border: none;
-	box-shadow: none;
-	border-radius: 0;
-	background: transparent;
+	margin: 0 !important;
+	padding: 6px 8px !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	background: #fff !important;
+	font-size: 13px;
+	line-height: 1.4;
+	color: #1e1e1e;
 
-	&:focus {
-		border: none;
-		box-shadow: none;
-		outline: none;
+	&:focus,
+	&:focus-visible,
+	&:hover,
+	&:active {
+		outline: none !important;
+		box-shadow: none !important;
+		border: 0 !important;
+	}
+
+	&:invalid {
+		box-shadow: none !important;
 	}
 
 	-moz-appearance: textfield;
@@ -69,36 +94,6 @@
 	margin-bottom: 0 !important;
 }
 
-.cb-responsive-unit-control .components-base-control__field {
-	margin-bottom: 0 !important;
-}
-
 .cb-responsive-unit-control__input-wrapper select.cb-responsive-unit-control__unit-select {
-	position: absolute;
-	right: 4px;
-	top: 50%;
-	transform: translateY(-50%);
-	height: auto;
-	min-height: unset;
-	max-width: none;
-	font-size: 11px;
-	line-height: 1;
-	padding: 0 8px;
-	border: none;
-	border-radius: 0;
-	box-shadow: none;
-	color: #007cba;
-	background: transparent !important;
-	background-image: none !important;
-	background-size: unset;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	cursor: pointer;
-	vertical-align: middle;
-
-	&:focus {
-		outline: none;
-		box-shadow: none;
-	}
+	@include croco-blocks-unit-select;
 }

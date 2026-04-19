@@ -110,6 +110,66 @@
 			"type": "string",
 			"default": "0px"
 		},
+		"menuItemTextColor": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItemTextHoverColor": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItemFontSize": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItemFontSizeDesktop": {
+			"type": "number",
+			"default": 0
+		},
+		"menuItemFontSizeTablet": {
+			"type": "number",
+			"default": 0
+		},
+		"menuItemFontSizeMobile": {
+			"type": "number",
+			"default": 0
+		},
+		"menuItemFontSizeUnit": {
+			"type": "string",
+			"default": "px"
+		},
+		"menuItemFontWeight": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItemLineHeight": {
+			"type": "number",
+			"default": 0
+		},
+		"menuItemLineHeightSet": {
+			"type": "boolean",
+			"default": false
+		},
+		"menuItemLineHeightUnit": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItemLetterSpacing": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItemLetterSpacingValue": {
+			"type": "number",
+			"default": 0
+		},
+		"menuItemLetterSpacingSet": {
+			"type": "boolean",
+			"default": false
+		},
+		"menuItemLetterSpacingUnit": {
+			"type": "string",
+			"default": ""
+		},
 		"enableToggle": {
 			"type": "boolean",
 			"default": false

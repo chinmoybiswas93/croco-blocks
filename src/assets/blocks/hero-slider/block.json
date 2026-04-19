@@ -122,9 +122,25 @@
 			"type": "number",
 			"default": 0
 		},
+		"headingLineHeightSet": {
+			"type": "boolean",
+			"default": false
+		},
+		"headingLineHeightUnit": {
+			"type": "string",
+			"default": ""
+		},
 		"textLineHeight": {
 			"type": "number",
 			"default": 0
+		},
+		"textLineHeightSet": {
+			"type": "boolean",
+			"default": false
+		},
+		"textLineHeightUnit": {
+			"type": "string",
+			"default": ""
 		},
 		"headingMarginBottom": {
 			"type": "number",

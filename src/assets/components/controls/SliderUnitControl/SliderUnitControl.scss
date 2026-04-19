@@ -1,0 +1,171 @@
+@import '../../../scss/shared/unit-select-shared';
+
+.cb-slider-unit-control {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 12px;
+}
+
+.cb-slider-unit-control__label {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: #1e1e1e;
+}
+
+/* Range 60% : number + unit 40% (ratio 3:2) */
+.cb-slider-unit-control__row {
+	display: grid;
+	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+	gap: 8px;
+	align-items: center;
+}
+
+/* Solid track, no UA border/outline on the range bar */
+.cb-slider-unit-control__range {
+	width: 100%;
+	min-width: 0;
+	max-height: 34px;
+	height: 4px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 2px;
+	background: transparent;
+	accent-color: #007cba;
+	-webkit-appearance: none;
+	appearance: none;
+	outline: none;
+	box-shadow: none;
+
+	&::-webkit-slider-runnable-track {
+		height: 4px;
+		border: 0;
+		border-radius: 2px;
+		/* Selected segment (left of thumb) — progress set inline via --cb-slider-range-progress */
+		background: linear-gradient(
+			to right,
+			#007cba 0,
+			#007cba var(--cb-slider-range-progress, 0%),
+			#dcdcde var(--cb-slider-range-progress, 0%),
+			#dcdcde 100%
+		);
+		box-shadow: none;
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 14px;
+		height: 14px;
+		margin-top: -5px;
+		border: 0;
+		border-radius: 50%;
+		background: #007cba;
+		box-shadow: none;
+		cursor: pointer;
+	}
+
+	&::-moz-range-track {
+		height: 4px;
+		border: 0;
+		border-radius: 2px;
+		background: #dcdcde;
+		box-shadow: none;
+	}
+
+	&::-moz-range-progress {
+		height: 4px;
+		border: 0;
+		border-radius: 2px 0 0 2px;
+		background: #007cba;
+	}
+
+	&::-moz-range-thumb {
+		width: 14px;
+		height: 14px;
+		border: 0;
+		border-radius: 50%;
+		background: #007cba;
+		box-shadow: none;
+		cursor: pointer;
+	}
+}
+
+.cb-slider-unit-control__input-wrap {
+	display: flex;
+	align-items: stretch;
+	min-width: 0;
+	width: 100%;
+	min-height: 28px;
+	padding: 0 0 0 6px;
+	border: 1px solid #757575;
+	border-radius: 2px;
+	background: #fff;
+	box-sizing: border-box;
+
+	&:focus-within {
+		border-color: #757575;
+		box-shadow: none;
+		outline: none;
+	}
+}
+
+/* Flat field inside outer border — reset UA + editor sidebar input styles */
+.cb-slider-unit-control__input-wrap input.cb-slider-unit-control__native-number {
+	flex: 1 1 auto;
+	min-width: 0;
+	width: 0;
+	margin: 0 !important;
+	padding: 4px 4px 4px 6px !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	font-size: 12px;
+	line-height: 1.3;
+	text-align: center;
+	color: #1e1e1e;
+	vertical-align: middle;
+
+	&:focus,
+	&:focus-visible,
+	&:focus-within,
+	&:hover,
+	&:active {
+		outline: none !important;
+		box-shadow: none !important;
+		border: 0 !important;
+	}
+
+	&:invalid {
+		box-shadow: none !important;
+	}
+
+	&::placeholder {
+		color: #949494;
+		opacity: 1;
+	}
+
+	-webkit-appearance: none;
+	-moz-appearance: textfield;
+	appearance: textfield;
+
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		appearance: none;
+		margin: 0;
+	}
+}
+
+.cb-slider-unit-control__input-wrap select.cb-slider-unit-control__unit-select {
+	@include croco-blocks-unit-select;
+}
+
+.cb-slider-unit-control__help {
+	margin: 0;
+	font-size: 12px;
+	color: #757575;
+}

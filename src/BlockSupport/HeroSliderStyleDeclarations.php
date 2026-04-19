@@ -33,8 +33,12 @@ class HeroSliderStyleDeclarations {
 		$text_color           = isset( $attributes['textColor'] ) ? $attributes['textColor'] : '';
 		$heading_font_size    = ! empty( $attributes['headingFontSize'] ) ? (int) $attributes['headingFontSize'] : 0;
 		$text_font_size       = ! empty( $attributes['textFontSize'] ) ? (int) $attributes['textFontSize'] : 0;
-		$heading_line_height  = ! empty( $attributes['headingLineHeight'] ) ? (float) $attributes['headingLineHeight'] : 0;
-		$text_line_height     = ! empty( $attributes['textLineHeight'] ) ? (float) $attributes['textLineHeight'] : 0;
+		$heading_line_height  = isset( $attributes['headingLineHeight'] ) ? (float) $attributes['headingLineHeight'] : 0;
+		$text_line_height     = isset( $attributes['textLineHeight'] ) ? (float) $attributes['textLineHeight'] : 0;
+		$heading_line_height_unit = isset( $attributes['headingLineHeightUnit'] ) ? strtolower( trim( (string) $attributes['headingLineHeightUnit'] ) ) : '';
+		$text_line_height_unit    = isset( $attributes['textLineHeightUnit'] ) ? strtolower( trim( (string) $attributes['textLineHeightUnit'] ) ) : '';
+		$heading_lh_set       = array_key_exists( 'headingLineHeightSet', $attributes ) ? (bool) $attributes['headingLineHeightSet'] : null;
+		$text_lh_set          = array_key_exists( 'textLineHeightSet', $attributes ) ? (bool) $attributes['textLineHeightSet'] : null;
 		$heading_margin_bottom = isset( $attributes['headingMarginBottom'] ) ? (int) $attributes['headingMarginBottom'] : 0;
 		$text_margin_bottom    = isset( $attributes['textMarginBottom'] ) ? (int) $attributes['textMarginBottom'] : 0;
 	
@@ -167,12 +171,14 @@ class HeroSliderStyleDeclarations {
 			$style_variables[] = '--cb-hero-slider-text-font-size-mobile:' . $text_font_size_mobile . $text_font_size_unit;
 		}
 	
-		if ( $heading_line_height ) {
-			$style_variables[] = '--cb-hero-slider-heading-line-height:' . $heading_line_height;
+		$heading_lh_css = self::hero_line_height_css( $heading_line_height, $heading_line_height_unit, $heading_lh_set );
+		if ( '' !== $heading_lh_css ) {
+			$style_variables[] = '--cb-hero-slider-heading-line-height:' . esc_attr( $heading_lh_css );
 		}
 	
-		if ( $text_line_height ) {
-			$style_variables[] = '--cb-hero-slider-text-line-height:' . $text_line_height;
+		$text_lh_css = self::hero_line_height_css( $text_line_height, $text_line_height_unit, $text_lh_set );
+		if ( '' !== $text_lh_css ) {
+			$style_variables[] = '--cb-hero-slider-text-line-height:' . esc_attr( $text_lh_css );
 		}
 	
 		if ( $heading_margin_bottom_desktop ) {
@@ -303,5 +309,31 @@ class HeroSliderStyleDeclarations {
 		}
 	
 		return $style_value;
+	}
+
+	/**
+	 * @param float|int|string $value
+	 * @param string             $unit
+	 * @param bool|null          $explicit_set false = default; true = emit including 0; null = legacy.
+	 * @return string
+	 */
+	private static function hero_line_height_css( $value, $unit, $explicit_set = null ) {
+		if ( false === $explicit_set ) {
+			return '';
+		}
+		$v = floatval( $value );
+		if ( null === $explicit_set ) {
+			if ( $v <= 0 ) {
+				return '';
+			}
+		} elseif ( true === $explicit_set && $v < 0 ) {
+			return '';
+		}
+		$u = strtolower( trim( (string) $unit ) );
+		$allowed = array( 'px', 'em', 'rem' );
+		if ( in_array( $u, $allowed, true ) ) {
+			return (string) $v . $u;
+		}
+		return (string) $v;
 	}
 }

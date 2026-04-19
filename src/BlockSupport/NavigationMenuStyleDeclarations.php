@@ -147,6 +147,56 @@ class NavigationMenuStyleDeclarations {
 		if ( $menu_item_padding_vertical ) {
 			$style .= '--cb-navigation-menu-item-padding-vertical:' . esc_attr( $menu_item_padding_vertical ) . ';';
 		}
+
+		$menu_item_text_color = ! empty( $attributes['menuItemTextColor'] )
+			? SpacingCss::sanitize_background_color( $attributes['menuItemTextColor'] )
+			: '';
+		$menu_item_text_hover_color = ! empty( $attributes['menuItemTextHoverColor'] )
+			? SpacingCss::sanitize_background_color( $attributes['menuItemTextHoverColor'] )
+			: '';
+		$menu_item_font_weight    = self::sanitize_menu_item_font_weight( isset( $attributes['menuItemFontWeight'] ) ? $attributes['menuItemFontWeight'] : '' );
+		$menu_item_font_sizes     = self::menu_item_font_sizes_from_attributes( $attributes );
+		$lh_set = array_key_exists( 'menuItemLineHeightSet', $attributes )
+			? (bool) $attributes['menuItemLineHeightSet']
+			: null;
+		$menu_item_line_height    = self::menu_item_line_height_css(
+			isset( $attributes['menuItemLineHeight'] ) ? $attributes['menuItemLineHeight'] : 0,
+			isset( $attributes['menuItemLineHeightUnit'] ) ? $attributes['menuItemLineHeightUnit'] : '',
+			$lh_set
+		);
+		$menu_item_letter_spacing = self::menu_item_letter_spacing_merged( $attributes );
+
+		if ( $menu_item_text_color ) {
+			$style .= '--cb-navigation-menu-item-text-color:' . esc_attr( $menu_item_text_color ) . ';';
+		}
+
+		if ( $menu_item_text_hover_color ) {
+			$style .= '--cb-navigation-menu-item-text-hover-color:' . esc_attr( $menu_item_text_hover_color ) . ';';
+		}
+
+		if ( ! empty( $menu_item_font_sizes['desktop'] ) ) {
+			$style .= '--cb-navigation-menu-item-font-size:' . esc_attr( $menu_item_font_sizes['desktop'] ) . ';';
+		}
+
+		if ( ! empty( $menu_item_font_sizes['tablet'] ) ) {
+			$style .= '--cb-navigation-menu-item-font-size-tablet:' . esc_attr( $menu_item_font_sizes['tablet'] ) . ';';
+		}
+
+		if ( ! empty( $menu_item_font_sizes['mobile'] ) ) {
+			$style .= '--cb-navigation-menu-item-font-size-mobile:' . esc_attr( $menu_item_font_sizes['mobile'] ) . ';';
+		}
+
+		if ( $menu_item_font_weight ) {
+			$style .= '--cb-navigation-menu-item-font-weight:' . esc_attr( $menu_item_font_weight ) . ';';
+		}
+
+		if ( $menu_item_line_height ) {
+			$style .= '--cb-navigation-menu-item-line-height:' . esc_attr( $menu_item_line_height ) . ';';
+		}
+
+		if ( $menu_item_letter_spacing ) {
+			$style .= '--cb-navigation-menu-item-letter-spacing:' . esc_attr( $menu_item_letter_spacing ) . ';';
+		}
 	
 		$style .= '--cb-navigation-mobile-menu-text-color:' . esc_attr( $mobile_menu_text_color ) . ';';
 	
@@ -221,5 +271,178 @@ class NavigationMenuStyleDeclarations {
 			default:
 				return 'flex-start';
 		}
+	}
+
+	/**
+	 * @param array $attributes Block attributes.
+	 * @return array{desktop:string,tablet:string,mobile:string}
+	 */
+	private static function menu_item_font_sizes_from_attributes( $attributes ) {
+		$unit = self::sanitize_menu_item_font_size_unit(
+			isset( $attributes['menuItemFontSizeUnit'] ) ? $attributes['menuItemFontSizeUnit'] : 'px'
+		);
+		$desktop_n = isset( $attributes['menuItemFontSizeDesktop'] ) ? floatval( $attributes['menuItemFontSizeDesktop'] ) : 0;
+		$tablet_n  = isset( $attributes['menuItemFontSizeTablet'] ) ? floatval( $attributes['menuItemFontSizeTablet'] ) : 0;
+		$mobile_n  = isset( $attributes['menuItemFontSizeMobile'] ) ? floatval( $attributes['menuItemFontSizeMobile'] ) : 0;
+
+		$legacy = isset( $attributes['menuItemFontSize'] ) ? trim( (string) $attributes['menuItemFontSize'] ) : '';
+		if ( $desktop_n <= 0 && '' !== $legacy ) {
+			$parsed = self::sanitize_menu_item_font_size( $legacy );
+			if ( '' !== $parsed ) {
+				return array(
+					'desktop' => $parsed,
+					'tablet'  => '',
+					'mobile'  => '',
+				);
+			}
+		}
+
+		return array(
+			'desktop' => self::menu_item_font_size_from_number_and_unit( $desktop_n, $unit ),
+			'tablet'  => self::menu_item_font_size_from_number_and_unit( $tablet_n, $unit ),
+			'mobile'  => self::menu_item_font_size_from_number_and_unit( $mobile_n, $unit ),
+		);
+	}
+
+	/**
+	 * @param mixed $unit Raw unit.
+	 * @return string
+	 */
+	private static function sanitize_menu_item_font_size_unit( $unit ) {
+		$u = strtolower( trim( (string) $unit ) );
+		$allowed = array( 'px', 'rem', 'em', '%' );
+		return in_array( $u, $allowed, true ) ? $u : 'px';
+	}
+
+	/**
+	 * @param float $n    Size number.
+	 * @param mixed $unit Unit string.
+	 * @return string
+	 */
+	private static function menu_item_font_size_from_number_and_unit( $n, $unit ) {
+		if ( ! is_numeric( $n ) || floatval( $n ) <= 0 ) {
+			return '';
+		}
+		$u = self::sanitize_menu_item_font_size_unit( $unit );
+		return floatval( $n ) . $u;
+	}
+
+	/**
+	 * @param mixed            $value        Raw line-height number.
+	 * @param mixed            $unit         '', 'px', 'em', or 'rem'; empty means unitless ratio.
+	 * @param bool|string|null $explicit_set false = theme default; true = emit including 0; null = legacy.
+	 * @return string
+	 */
+	private static function menu_item_line_height_css( $value, $unit, $explicit_set = null ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+		if ( false === $explicit_set ) {
+			return '';
+		}
+		$v = floatval( $value );
+		if ( null === $explicit_set ) {
+			if ( $v <= 0 ) {
+				return '';
+			}
+		} elseif ( true === $explicit_set && $v < 0 ) {
+			return '';
+		}
+		$u = strtolower( trim( (string) $unit ) );
+		$allowed = array( '', 'px', 'em', 'rem' );
+		if ( ! in_array( $u, $allowed, true ) ) {
+			$u = '';
+		}
+		if ( '' === $u ) {
+			return (string) $v;
+		}
+		return $v . $u;
+	}
+
+	/**
+	 * @param array $attributes Block attributes.
+	 * @return string
+	 */
+	private static function menu_item_letter_spacing_merged( $attributes ) {
+		$legacy = isset( $attributes['menuItemLetterSpacing'] ) ? trim( (string) $attributes['menuItemLetterSpacing'] ) : '';
+		$val_n  = isset( $attributes['menuItemLetterSpacingValue'] ) ? floatval( $attributes['menuItemLetterSpacingValue'] ) : 0;
+		$u      = isset( $attributes['menuItemLetterSpacingUnit'] ) ? strtolower( trim( (string) $attributes['menuItemLetterSpacingUnit'] ) ) : 'em';
+		$allowed_u = array( 'px', 'em', 'rem', '%' );
+		if ( ! in_array( $u, $allowed_u, true ) ) {
+			$u = 'em';
+		}
+		if ( array_key_exists( 'menuItemLetterSpacingSet', $attributes ) ) {
+			if ( ! $attributes['menuItemLetterSpacingSet'] ) {
+				return '' !== $legacy ? self::sanitize_menu_item_letter_spacing( $legacy ) : '';
+			}
+			$combined = $val_n . $u;
+			return self::sanitize_menu_item_letter_spacing( $combined );
+		}
+		if ( 0.0 !== $val_n ) {
+			$combined = $val_n . $u;
+			return self::sanitize_menu_item_letter_spacing( $combined );
+		}
+		if ( '' !== $legacy ) {
+			return self::sanitize_menu_item_letter_spacing( $legacy );
+		}
+		return '';
+	}
+
+	/**
+	 * @param mixed $value Raw attribute.
+	 * @return string Safe font-size or empty.
+	 */
+	private static function sanitize_menu_item_font_size( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return '';
+		}
+		if ( preg_match( '/^[\d.]+\s*(px|rem|em|%)$/i', $value ) ) {
+			return preg_replace( '/\s+/', '', $value );
+		}
+		return '';
+	}
+
+	/**
+	 * @param mixed $value Raw attribute.
+	 * @return string Numeric weight or empty.
+	 */
+	private static function sanitize_menu_item_font_weight( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return '';
+		}
+		if ( in_array( $value, array( '400', '500', '600', '700' ), true ) ) {
+			return $value;
+		}
+		return '';
+	}
+
+	/**
+	 * @param mixed $value Raw attribute.
+	 * @return string Safe letter-spacing or empty.
+	 */
+	private static function sanitize_menu_item_letter_spacing( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return '';
+		}
+		$lower = strtolower( $value );
+		if ( in_array( $lower, array( 'normal', 'inherit', 'initial', 'unset' ), true ) ) {
+			return $lower;
+		}
+		if ( preg_match( '/^-?[\d.]+\s*(px|rem|em|%)$/i', $value ) ) {
+			return preg_replace( '/\s+/', '', $value );
+		}
+		return '';
 	}
 }

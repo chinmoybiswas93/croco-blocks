@@ -1,5 +1,12 @@
 import { registerBlockType } from '@wordpress/blocks';
+import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
+import ServerSideRender from '@wordpress/server-side-render';
+import metadata from './block.json';
+import './style.scss';
+import './editor.scss';
 import {
+	useBlockEditContext,
 	useBlockProps,
 	MediaPlaceholder,
 	MediaUpload,
@@ -8,26 +15,20 @@ import {
 import {
 	PanelBody,
 	ToggleControl,
-	RangeControl,
 	SelectControl,
 	Button,
 	FocalPointPicker,
 	Placeholder,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
-import ServerSideRender from '@wordpress/server-side-render';
-import metadata from './block.json';
-import './style.scss';
-import './editor.scss';
 import { InspectorTabs } from '../../components/inspector/InspectorTabs/InspectorTabs';
 import { ResponsiveUnitControl } from '../../components/controls/ResponsiveUnitControl/ResponsiveUnitControl';
+import { ColorOpacityControl } from '../../components/controls/ColorOpacityControl/ColorOpacityControl';
+import { SliderUnitControl } from '../../components/controls/SliderUnitControl/SliderUnitControl';
 import {
 	getBorderCssVarsForEditor,
 	getSpacingCssVarsForEditor,
 } from '../../utils/spacingKeys';
 import { getAdvancedBackgroundStyle } from '../../utils/advancedBackground';
-import { ColorOpacityControl } from '../../components/controls/ColorOpacityControl/ColorOpacityControl';
 import { useCrocoInstanceKey } from '../../hooks/useCrocoInstanceKey';
 import { useCrocoInstanceStylesheet } from '../../hooks/useCrocoInstanceStylesheet';
 import { buildCrocoInstanceCssText } from '../../utils/crocoInstanceCssText';
@@ -49,8 +50,18 @@ const DEFAULT_SLIDE = {
 	buttonNewTab: false,
 };
 
+const SLIDER_PX_UNITS = [ { value: 'px', label: 'px' } ];
+const SLIDER_MS_UNITS = [ { value: 'ms', label: 'ms' } ];
+const LINE_HEIGHT_UNITS = [
+	{ value: 'px', label: 'px' },
+	{ value: 'em', label: 'em' },
+	{ value: 'rem', label: 'rem' },
+];
+const LINE_HEIGHT_UNIT_DEFAULT = LINE_HEIGHT_UNITS[ 0 ].value;
+
 registerBlockType( metadata.name, {
 	edit( { attributes, setAttributes } ) {
+		const { clientId } = useBlockEditContext();
 		const {
 			slides = [],
 			showArrows,
@@ -80,7 +91,11 @@ registerBlockType( metadata.name, {
 			textFontSizeMobile,
 			textFontSizeUnit,
 			headingLineHeight,
+			headingLineHeightSet,
+			headingLineHeightUnit,
 			textLineHeight,
+			textLineHeightSet,
+			textLineHeightUnit,
 			headingMarginBottom,
 			textMarginBottom,
 			headingMarginBottomDesktop,
@@ -117,7 +132,12 @@ registerBlockType( metadata.name, {
 			buttonStyle,
 		} = attributes;
 
-		useCrocoInstanceKey( attributes, setAttributes );
+		useCrocoInstanceKey(
+			attributes,
+			setAttributes,
+			clientId,
+			metadata.name
+		);
 
 		const instanceCssText = useMemo(
 			() => buildCrocoInstanceCssText( metadata.name, attributes ),
@@ -175,6 +195,63 @@ registerBlockType( metadata.name, {
 		};
 
 		const hasSlides = slides && slides.length > 0;
+
+		const headingLineHeightSetResolved = useMemo( () => {
+			if ( headingLineHeightSet === true ) {
+				return true;
+			}
+			if ( headingLineHeightSet === false ) {
+				return false;
+			}
+			return (
+				( headingLineHeight ?? 0 ) > 0 ||
+				( headingLineHeightUnit || '' ) !== ''
+			);
+		}, [
+			headingLineHeightSet,
+			headingLineHeight,
+			headingLineHeightUnit,
+		] );
+
+		const textLineHeightSetResolved = useMemo( () => {
+			if ( textLineHeightSet === true ) {
+				return true;
+			}
+			if ( textLineHeightSet === false ) {
+				return false;
+			}
+			return (
+				( textLineHeight ?? 0 ) > 0 ||
+				( textLineHeightUnit || '' ) !== ''
+			);
+		}, [ textLineHeightSet, textLineHeight, textLineHeightUnit ] );
+
+		const headingLineHeightSliderBounds = useMemo( () => {
+			const u = (
+				headingLineHeightUnit || LINE_HEIGHT_UNIT_DEFAULT
+			).toLowerCase();
+			if ( u === 'px' ) {
+				return { min: 0, max: 96, step: 1 };
+			}
+			return { min: 0.8, max: 3, step: 0.05 };
+		}, [ headingLineHeightUnit ] );
+
+		const textLineHeightSliderBounds = useMemo( () => {
+			const u = (
+				textLineHeightUnit || LINE_HEIGHT_UNIT_DEFAULT
+			).toLowerCase();
+			if ( u === 'px' ) {
+				return { min: 0, max: 96, step: 1 };
+			}
+			return { min: 0.8, max: 3, step: 0.05 };
+		}, [ textLineHeightUnit ] );
+
+		const resolveHeroLineHeightUnit = ( raw ) => {
+			const u = ( raw || LINE_HEIGHT_UNIT_DEFAULT ).toLowerCase();
+			return [ 'px', 'em', 'rem' ].includes( u )
+				? u
+				: LINE_HEIGHT_UNIT_DEFAULT;
+		};
 
 		const heightValues = {
 			desktop: heightDesktop
@@ -278,17 +355,29 @@ registerBlockType( metadata.name, {
 						}
 					/>
 					{ autoplay && (
-						<RangeControl
+						<SliderUnitControl
 							label={ __(
-								'Autoplay speed (ms)',
+								'Autoplay speed',
 								'croco-blocks'
 							) }
+							value={ ( () => {
+								const n =
+									typeof autoplaySpeed === 'number'
+										? autoplaySpeed
+										: parseFloat( autoplaySpeed );
+								return Number.isFinite( n ) ? n : 5000;
+							} )() }
+							unit="ms"
+							units={ SLIDER_MS_UNITS }
 							min={ 1000 }
 							max={ 10000 }
 							step={ 500 }
-							value={ autoplaySpeed || 5000 }
-							onChange={ ( value ) =>
-								setAttributes( { autoplaySpeed: value } )
+							onChange={ ( { value: v } ) =>
+								setAttributes( {
+									autoplaySpeed: Number.isFinite( v )
+										? v
+										: 5000,
+								} )
 							}
 						/>
 					) }
@@ -717,20 +806,159 @@ registerBlockType( metadata.name, {
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
 							'Title line height',
 							'croco-blocks'
 						) }
-						min={ 0.8 }
-						max={ 2 }
-						step={ 0.05 }
-						value={ headingLineHeight || 0 }
-						onChange={ ( value ) =>
-							setAttributes( {
-								headingLineHeight: value || 0,
-							} )
+						value={
+							headingLineHeightSetResolved
+								? headingLineHeight
+								: null
 						}
+						unit={ resolveHeroLineHeightUnit(
+							headingLineHeightUnit
+						) }
+						units={ LINE_HEIGHT_UNITS }
+						min={ headingLineHeightSliderBounds.min }
+						max={ headingLineHeightSliderBounds.max }
+						step={ headingLineHeightSliderBounds.step }
+						emptyWhenUnset
+						unsetSliderValue={
+							resolveHeroLineHeightUnit(
+								headingLineHeightUnit
+							) === 'px'
+								? undefined
+								: 1.2
+						}
+						numberPlaceholder={
+							resolveHeroLineHeightUnit(
+								headingLineHeightUnit
+							) === 'px'
+								? '24'
+								: '1.2'
+						}
+						onChange={ ( {
+							value,
+							unit,
+							inputCleared,
+						} ) => {
+							if ( inputCleared ) {
+								setAttributes( {
+									headingLineHeightSet: false,
+									headingLineHeight: 0,
+									headingLineHeightUnit: '',
+								} );
+								return;
+							}
+							let v = value;
+							if (
+								typeof v !== 'number' ||
+								Number.isNaN( v )
+							) {
+								v = parseFloat( String( v ), 10 );
+							}
+							if ( ! Number.isFinite( v ) ) {
+								return;
+							}
+							const prevU =
+								headingLineHeightUnit ||
+								LINE_HEIGHT_UNIT_DEFAULT;
+							const nextU = [
+								'px',
+								'em',
+								'rem',
+							].includes( ( unit || '' ).toLowerCase() )
+								? unit
+								: LINE_HEIGHT_UNIT_DEFAULT;
+
+							if ( ! headingLineHeightSetResolved ) {
+								if ( v === 0 ) {
+									if (
+										nextU.toLowerCase() !==
+										prevU.toLowerCase()
+									) {
+										setAttributes( {
+											headingLineHeightUnit:
+												nextU ===
+												LINE_HEIGHT_UNIT_DEFAULT
+													? ''
+													: nextU,
+										} );
+									} else {
+										setAttributes( {
+											headingLineHeightSet: true,
+											headingLineHeight: 0,
+											headingLineHeightUnit: nextU,
+										} );
+									}
+									return;
+								}
+								let nextV = v;
+								if ( prevU !== nextU ) {
+									if (
+										nextU === 'px' &&
+										v > 0 &&
+										v <= 4
+									) {
+										nextV = Math.min(
+											96,
+											Math.max(
+												0,
+												Math.round( v * 16 )
+											)
+										);
+									} else if (
+										prevU === 'px' &&
+										nextU !== 'px' &&
+										v > 0
+									) {
+										nextV =
+											Math.round(
+												( v / 16 ) * 100
+											) / 100;
+										if ( nextV < 0.8 ) {
+											nextV = 1.2;
+										}
+									}
+								}
+								setAttributes( {
+									headingLineHeightSet: true,
+									headingLineHeight: nextV,
+									headingLineHeightUnit: nextU,
+								} );
+								return;
+							}
+
+							let nextV = v;
+							if ( prevU !== nextU ) {
+								if ( nextU === 'px' && v > 0 && v <= 4 ) {
+									nextV = Math.min(
+										96,
+										Math.max(
+											0,
+											Math.round( v * 16 )
+										)
+									);
+								} else if (
+									prevU === 'px' &&
+									nextU !== 'px' &&
+									v > 0
+								) {
+									nextV =
+										Math.round( ( v / 16 ) * 100 ) /
+										100;
+									if ( nextV < 0.8 ) {
+										nextV = 1.2;
+									}
+								}
+							}
+							setAttributes( {
+								headingLineHeightSet: true,
+								headingLineHeight: nextV,
+								headingLineHeightUnit: nextU,
+							} );
+						} }
 					/>
 					<ResponsiveUnitControl
 						label={ __(
@@ -818,20 +1046,159 @@ registerBlockType( metadata.name, {
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
 							'Text line height',
 							'croco-blocks'
 						) }
-						min={ 0.8 }
-						max={ 2 }
-						step={ 0.05 }
-						value={ textLineHeight || 0 }
-						onChange={ ( value ) =>
-							setAttributes( {
-								textLineHeight: value || 0,
-							} )
+						value={
+							textLineHeightSetResolved
+								? textLineHeight
+								: null
 						}
+						unit={ resolveHeroLineHeightUnit(
+							textLineHeightUnit
+						) }
+						units={ LINE_HEIGHT_UNITS }
+						min={ textLineHeightSliderBounds.min }
+						max={ textLineHeightSliderBounds.max }
+						step={ textLineHeightSliderBounds.step }
+						emptyWhenUnset
+						unsetSliderValue={
+							resolveHeroLineHeightUnit(
+								textLineHeightUnit
+							) === 'px'
+								? undefined
+								: 1.2
+						}
+						numberPlaceholder={
+							resolveHeroLineHeightUnit(
+								textLineHeightUnit
+							) === 'px'
+								? '24'
+								: '1.2'
+						}
+						onChange={ ( {
+							value,
+							unit,
+							inputCleared,
+						} ) => {
+							if ( inputCleared ) {
+								setAttributes( {
+									textLineHeightSet: false,
+									textLineHeight: 0,
+									textLineHeightUnit: '',
+								} );
+								return;
+							}
+							let v = value;
+							if (
+								typeof v !== 'number' ||
+								Number.isNaN( v )
+							) {
+								v = parseFloat( String( v ), 10 );
+							}
+							if ( ! Number.isFinite( v ) ) {
+								return;
+							}
+							const prevU =
+								textLineHeightUnit ||
+								LINE_HEIGHT_UNIT_DEFAULT;
+							const nextU = [
+								'px',
+								'em',
+								'rem',
+							].includes( ( unit || '' ).toLowerCase() )
+								? unit
+								: LINE_HEIGHT_UNIT_DEFAULT;
+
+							if ( ! textLineHeightSetResolved ) {
+								if ( v === 0 ) {
+									if (
+										nextU.toLowerCase() !==
+										prevU.toLowerCase()
+									) {
+										setAttributes( {
+											textLineHeightUnit:
+												nextU ===
+												LINE_HEIGHT_UNIT_DEFAULT
+													? ''
+													: nextU,
+										} );
+									} else {
+										setAttributes( {
+											textLineHeightSet: true,
+											textLineHeight: 0,
+											textLineHeightUnit: nextU,
+										} );
+									}
+									return;
+								}
+								let nextV = v;
+								if ( prevU !== nextU ) {
+									if (
+										nextU === 'px' &&
+										v > 0 &&
+										v <= 4
+									) {
+										nextV = Math.min(
+											96,
+											Math.max(
+												0,
+												Math.round( v * 16 )
+											)
+										);
+									} else if (
+										prevU === 'px' &&
+										nextU !== 'px' &&
+										v > 0
+									) {
+										nextV =
+											Math.round(
+												( v / 16 ) * 100
+											) / 100;
+										if ( nextV < 0.8 ) {
+											nextV = 1.2;
+										}
+									}
+								}
+								setAttributes( {
+									textLineHeightSet: true,
+									textLineHeight: nextV,
+									textLineHeightUnit: nextU,
+								} );
+								return;
+							}
+
+							let nextV = v;
+							if ( prevU !== nextU ) {
+								if ( nextU === 'px' && v > 0 && v <= 4 ) {
+									nextV = Math.min(
+										96,
+										Math.max(
+											0,
+											Math.round( v * 16 )
+										)
+									);
+								} else if (
+									prevU === 'px' &&
+									nextU !== 'px' &&
+									v > 0
+								) {
+									nextV =
+										Math.round( ( v / 16 ) * 100 ) /
+										100;
+									if ( nextV < 0.8 ) {
+										nextV = 1.2;
+									}
+								}
+							}
+							setAttributes( {
+								textLineHeightSet: true,
+								textLineHeight: nextV,
+								textLineHeightUnit: nextU,
+							} );
+						} }
 					/>
 					<ResponsiveUnitControl
 						label={ __(
@@ -876,15 +1243,18 @@ registerBlockType( metadata.name, {
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
-							'Content max width (px)',
+							'Content max width',
 							'croco-blocks'
 						) }
+						value={ contentMaxWidth || 0 }
+						unit="px"
+						units={ SLIDER_PX_UNITS }
 						min={ 400 }
 						max={ 1600 }
-						value={ contentMaxWidth || 0 }
-						onChange={ ( value ) =>
+						step={ 1 }
+						onChange={ ( { value } ) =>
 							setAttributes( {
 								contentMaxWidth: value || 0,
 							} )
@@ -917,71 +1287,86 @@ registerBlockType( metadata.name, {
 							setAttributes( { buttonAlign: value } )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
-							'Vertical padding (px)',
+							'Vertical padding',
 							'croco-blocks'
 						) }
+						value={ buttonPaddingY || 0 }
+						unit="px"
+						units={ SLIDER_PX_UNITS }
 						min={ 0 }
 						max={ 40 }
-						value={ buttonPaddingY || 0 }
-						onChange={ ( value ) =>
+						step={ 1 }
+						onChange={ ( { value } ) =>
 							setAttributes( {
 								buttonPaddingY: value || 0,
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
-							'Horizontal padding (px)',
+							'Horizontal padding',
 							'croco-blocks'
 						) }
+						value={ buttonPaddingX || 0 }
+						unit="px"
+						units={ SLIDER_PX_UNITS }
 						min={ 0 }
 						max={ 80 }
-						value={ buttonPaddingX || 0 }
-						onChange={ ( value ) =>
+						step={ 1 }
+						onChange={ ( { value } ) =>
 							setAttributes( {
 								buttonPaddingX: value || 0,
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
-							'Top margin (px)',
+							'Top margin',
 							'croco-blocks'
 						) }
+						value={ buttonMarginTop || 0 }
+						unit="px"
+						units={ SLIDER_PX_UNITS }
 						min={ 0 }
 						max={ 80 }
-						value={ buttonMarginTop || 0 }
-						onChange={ ( value ) =>
+						step={ 1 }
+						onChange={ ( { value } ) =>
 							setAttributes( {
 								buttonMarginTop: value || 0,
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
-							'Border radius (px)',
+							'Border radius',
 							'croco-blocks'
 						) }
+						value={ buttonBorderRadius || 0 }
+						unit="px"
+						units={ SLIDER_PX_UNITS }
 						min={ 0 }
 						max={ 100 }
-						value={ buttonBorderRadius || 0 }
-						onChange={ ( value ) =>
+						step={ 1 }
+						onChange={ ( { value } ) =>
 							setAttributes( {
 								buttonBorderRadius: value || 0,
 							} )
 						}
 					/>
-					<RangeControl
+					<SliderUnitControl
 						label={ __(
-							'Border width (px)',
+							'Border width',
 							'croco-blocks'
 						) }
+						value={ buttonBorderWidth || 0 }
+						unit="px"
+						units={ SLIDER_PX_UNITS }
 						min={ 0 }
 						max={ 10 }
-						value={ buttonBorderWidth || 0 }
-						onChange={ ( value ) =>
+						step={ 1 }
+						onChange={ ( { value } ) =>
 							setAttributes( {
 								buttonBorderWidth: value || 0,
 							} )

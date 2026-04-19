@@ -7,6 +7,34 @@
 import { buildAdvancedTabDeclarationsString } from './crocoInstanceCssAdvanced';
 
 /**
+ * @param {number|string|undefined} val
+ * @param {string|undefined}        unit
+ * @param {boolean|undefined}       explicitSet false = default; true = emit including 0; undefined = legacy.
+ * @return {string}
+ */
+function heroLineHeightCss( val, unit, explicitSet ) {
+	if ( explicitSet === false ) {
+		return '';
+	}
+	const v = parseFloat( String( val ), 10 );
+	if ( ! Number.isFinite( v ) ) {
+		return '';
+	}
+	if ( explicitSet === undefined ) {
+		if ( v <= 0 ) {
+			return '';
+		}
+	} else if ( explicitSet === true && v < 0 ) {
+		return '';
+	}
+	const u = String( unit ?? '' ).toLowerCase().trim();
+	if ( [ 'px', 'em', 'rem' ].includes( u ) ) {
+		return `${ v }${ u }`;
+	}
+	return String( v );
+}
+
+/**
  * @param {Object} a
  * @return {string}
  */
@@ -25,8 +53,20 @@ export function buildHeroSliderStyleDeclarationsString( a ) {
 	const text_color = a.textColor ?? '';
 	const heading_font_size = a.headingFontSize ? parseInt( String( a.headingFontSize ), 10 ) : 0;
 	const text_font_size = a.textFontSize ? parseInt( String( a.textFontSize ), 10 ) : 0;
-	const heading_line_height = a.headingLineHeight ? parseFloat( String( a.headingLineHeight ) ) : 0;
-	const text_line_height = a.textLineHeight ? parseFloat( String( a.textLineHeight ) ) : 0;
+	const heading_line_height_css = heroLineHeightCss(
+		a.headingLineHeight,
+		a.headingLineHeightUnit,
+		Object.prototype.hasOwnProperty.call( a, 'headingLineHeightSet' )
+			? a.headingLineHeightSet
+			: undefined
+	);
+	const text_line_height_css = heroLineHeightCss(
+		a.textLineHeight,
+		a.textLineHeightUnit,
+		Object.prototype.hasOwnProperty.call( a, 'textLineHeightSet' )
+			? a.textLineHeightSet
+			: undefined
+	);
 	const heading_margin_bottom = a.headingMarginBottom
 		? parseInt( String( a.headingMarginBottom ), 10 )
 		: 0;
@@ -220,12 +260,16 @@ export function buildHeroSliderStyleDeclarationsString( a ) {
 		);
 	}
 
-	if ( heading_line_height ) {
-		styleVars.push( `--cb-hero-slider-heading-line-height:${ heading_line_height }` );
+	if ( heading_line_height_css ) {
+		styleVars.push(
+			`--cb-hero-slider-heading-line-height:${ heading_line_height_css }`
+		);
 	}
 
-	if ( text_line_height ) {
-		styleVars.push( `--cb-hero-slider-text-line-height:${ text_line_height }` );
+	if ( text_line_height_css ) {
+		styleVars.push(
+			`--cb-hero-slider-text-line-height:${ text_line_height_css }`
+		);
 	}
 
 	if ( heading_margin_bottom_desktop ) {

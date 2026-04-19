@@ -87,7 +87,7 @@
 		);
 		line-height: var(
 			--cb-hero-slider-heading-line-height,
-			inherit
+			normal
 		);
 	}
 
@@ -102,7 +102,7 @@
 			--cb-hero-slider-text-font-size,
 			inherit
 		);
-		line-height: var(--cb-hero-slider-text-line-height, inherit);
+		line-height: var(--cb-hero-slider-text-line-height, normal);
 	}
 
 	&__actions {
