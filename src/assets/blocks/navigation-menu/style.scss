@@ -677,17 +677,20 @@ nav.wp-block-croco-blocks-navigation-menu {
 // root. Exclude the editor-only wrapper around ServerSideRender to avoid doubling.
 .wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 	@include croco-blocks-spacing-longhands-mobile;
+	@include croco-blocks-alignfull-margins-mobile;
 }
 
 @media (min-width: $cb-spacing-bp-tablet) {
 	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 		@include croco-blocks-spacing-longhands-tablet;
+		@include croco-blocks-alignfull-margins-tablet;
 	}
 }
 
 @media (min-width: $cb-spacing-bp-desktop) {
 	.wp-block-croco-blocks-navigation-menu:not(.croco-blocks-ssr-editor-root) {
 		@include croco-blocks-spacing-longhands-desktop;
+		@include croco-blocks-alignfull-margins-desktop;
 	}
 }
 

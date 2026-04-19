@@ -10,7 +10,6 @@ const TAB_HOVER = 'hover';
 
 const BORDER_STYLE_OPTIONS = [
 	{ value: '', label: __( '— None —', 'croco-blocks' ) },
-	{ value: 'none', label: __( 'None', 'croco-blocks' ) },
 	{ value: 'solid', label: __( 'Solid', 'croco-blocks' ) },
 	{ value: 'dashed', label: __( 'Dashed', 'croco-blocks' ) },
 	{ value: 'dotted', label: __( 'Dotted', 'croco-blocks' ) },
@@ -34,6 +33,23 @@ function borderStyleShowsDetails( style ) {
 		return false;
 	}
 	return true;
+}
+
+/**
+ * Value for SelectControl: legacy saves may use `none`; map to empty so one "None" option matches.
+ *
+ * @param {string|undefined|null} style
+ * @return {string}
+ */
+function borderStyleSelectValue( style ) {
+	if ( style === undefined || style === null ) {
+		return '';
+	}
+	const s = String( style ).trim();
+	if ( s === '' || s === 'none' ) {
+		return '';
+	}
+	return s;
 }
 
 /**
@@ -83,7 +99,9 @@ export const BorderControls = ( {
 							<div className="croco-blocks-border-controls__field">
 								<SelectControl
 									label={ __( 'Border type', 'croco-blocks' ) }
-									value={ attributes.cbBorderStyle ?? '' }
+									value={ borderStyleSelectValue(
+										attributes.cbBorderStyle
+									) }
 									options={ BORDER_STYLE_OPTIONS }
 									onChange={ ( value ) =>
 										setAttributes( {
@@ -126,24 +144,24 @@ export const BorderControls = ( {
 											}
 										/>
 									</div>
-									<div className="croco-blocks-advanced-controls__section croco-blocks-advanced-controls__section--nested">
-										<BorderRadiusControl
-											mode="borderRadius"
-											attributes={ attributes }
-											setAttributes={ setAttributes }
-										/>
-									</div>
 								</>
 							) }
+							<div className="croco-blocks-advanced-controls__section croco-blocks-advanced-controls__section--nested">
+								<BorderRadiusControl
+									mode="borderRadius"
+									attributes={ attributes }
+									setAttributes={ setAttributes }
+								/>
+							</div>
 						</div>
 					) : (
 						<div className="croco-blocks-border-controls__panel">
 							<div className="croco-blocks-border-controls__field">
 								<SelectControl
 									label={ __( 'Border type', 'croco-blocks' ) }
-									value={
-										attributes.cbBorderHoverStyle ?? ''
-									}
+									value={ borderStyleSelectValue(
+										attributes.cbBorderHoverStyle
+									) }
 									options={ BORDER_STYLE_OPTIONS }
 									onChange={ ( value ) =>
 										setAttributes( {
@@ -186,15 +204,15 @@ export const BorderControls = ( {
 											}
 										/>
 									</div>
-									<div className="croco-blocks-advanced-controls__section croco-blocks-advanced-controls__section--nested">
-										<BorderRadiusControl
-											mode="borderRadiusHover"
-											attributes={ attributes }
-											setAttributes={ setAttributes }
-										/>
-									</div>
 								</>
 							) }
+							<div className="croco-blocks-advanced-controls__section croco-blocks-advanced-controls__section--nested">
+								<BorderRadiusControl
+									mode="borderRadiusHover"
+									attributes={ attributes }
+									setAttributes={ setAttributes }
+								/>
+							</div>
 						</div>
 					)
 				}

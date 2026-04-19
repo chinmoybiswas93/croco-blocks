@@ -1,6 +1,13 @@
 /**
  * Advanced tab spacing: consumes --cb-padding-* / --cb-margin-* from PHP.
  * Breakpoints align with the block editor preview (tablet 782px, desktop 960px).
+ *
+ * Margins use logical longhands so they align with theme.json / global styles
+ * (margin-block-*, block gap) instead of fighting physical margin-top only.
+ *
+ * Full-width (alignfull) + useRootPaddingAwareAlignments: core sets negative
+ * horizontal margins to break out of root padding — that overrides Advanced
+ * margin unless we combine breakout + --cb-margin-* (see alignfull mixins).
  */
 
 $cb-spacing-bp-tablet: 782px;
@@ -9,58 +16,110 @@ $cb-spacing-bp-desktop: 960px;
 @mixin croco-blocks-spacing-longhands-mobile {
 	/* Padding must not expand total width (nav and some roots default to content-box). */
 	box-sizing: border-box;
-	padding-top: var(
+	padding-block-start: var(
 		--cb-padding-top-mobile,
 		var(--cb-padding-top-tablet, var(--cb-padding-top))
 	);
-	padding-right: var(
+	padding-inline-end: var(
 		--cb-padding-right-mobile,
 		var(--cb-padding-right-tablet, var(--cb-padding-right))
 	);
-	padding-bottom: var(
+	padding-block-end: var(
 		--cb-padding-bottom-mobile,
 		var(--cb-padding-bottom-tablet, var(--cb-padding-bottom))
 	);
-	padding-left: var(
+	padding-inline-start: var(
 		--cb-padding-left-mobile,
 		var(--cb-padding-left-tablet, var(--cb-padding-left))
 	);
-	margin-top: var(
+	margin-block-start: var(
 		--cb-margin-top-mobile,
 		var(--cb-margin-top-tablet, var(--cb-margin-top))
 	);
-	margin-right: var(
+	margin-inline-end: var(
 		--cb-margin-right-mobile,
 		var(--cb-margin-right-tablet, var(--cb-margin-right))
 	);
-	margin-bottom: var(
+	margin-block-end: var(
 		--cb-margin-bottom-mobile,
 		var(--cb-margin-bottom-tablet, var(--cb-margin-bottom))
 	);
-	margin-left: var(
+	margin-inline-start: var(
 		--cb-margin-left-mobile,
 		var(--cb-margin-left-tablet, var(--cb-margin-left))
 	);
+	/* New block formatting context: reduces odd margin-collapsing with children. */
+	display: flow-root;
 }
 
 @mixin croco-blocks-spacing-longhands-tablet {
-	padding-top: var(--cb-padding-top-tablet, var(--cb-padding-top));
-	padding-right: var(--cb-padding-right-tablet, var(--cb-padding-right));
-	padding-bottom: var(--cb-padding-bottom-tablet, var(--cb-padding-bottom));
-	padding-left: var(--cb-padding-left-tablet, var(--cb-padding-left));
-	margin-top: var(--cb-margin-top-tablet, var(--cb-margin-top));
-	margin-right: var(--cb-margin-right-tablet, var(--cb-margin-right));
-	margin-bottom: var(--cb-margin-bottom-tablet, var(--cb-margin-bottom));
-	margin-left: var(--cb-margin-left-tablet, var(--cb-margin-left));
+	padding-block-start: var(--cb-padding-top-tablet, var(--cb-padding-top));
+	padding-inline-end: var(--cb-padding-right-tablet, var(--cb-padding-right));
+	padding-block-end: var(--cb-padding-bottom-tablet, var(--cb-padding-bottom));
+	padding-inline-start: var(--cb-padding-left-tablet, var(--cb-padding-left));
+	margin-block-start: var(--cb-margin-top-tablet, var(--cb-margin-top));
+	margin-inline-end: var(--cb-margin-right-tablet, var(--cb-margin-right));
+	margin-block-end: var(--cb-margin-bottom-tablet, var(--cb-margin-bottom));
+	margin-inline-start: var(--cb-margin-left-tablet, var(--cb-margin-left));
 }
 
 @mixin croco-blocks-spacing-longhands-desktop {
-	padding-top: var(--cb-padding-top);
-	padding-right: var(--cb-padding-right);
-	padding-bottom: var(--cb-padding-bottom);
-	padding-left: var(--cb-padding-left);
-	margin-top: var(--cb-margin-top);
-	margin-right: var(--cb-margin-right);
-	margin-bottom: var(--cb-margin-bottom);
-	margin-left: var(--cb-margin-left);
+	padding-block-start: var(--cb-padding-top);
+	padding-inline-end: var(--cb-padding-right);
+	padding-block-end: var(--cb-padding-bottom);
+	padding-inline-start: var(--cb-padding-left);
+	margin-block-start: var(--cb-margin-top);
+	margin-inline-end: var(--cb-margin-right);
+	margin-block-end: var(--cb-margin-bottom);
+	margin-inline-start: var(--cb-margin-left);
+}
+
+/*
+ * WP global styles (class-wp-theme-json.php): .has-global-padding > .alignfull
+ * uses negative margins to cancel root padding. Without this, Advanced left/right
+ * margins never show. Nested rules also zero alignfull margins — !important wins.
+ */
+@mixin croco-blocks-alignfull-margins-mobile {
+	@at-root .has-global-padding > & {
+		&.alignfull {
+			margin-inline-start: calc(
+				var(--wp--style--root--padding-left, 0px) * -1 +
+					var(--cb-margin-left-mobile, var(--cb-margin-left, 0px))
+			) !important;
+			margin-inline-end: calc(
+				var(--wp--style--root--padding-right, 0px) * -1 +
+					var(--cb-margin-right-mobile, var(--cb-margin-right, 0px))
+			) !important;
+		}
+	}
+}
+
+@mixin croco-blocks-alignfull-margins-tablet {
+	@at-root .has-global-padding > & {
+		&.alignfull {
+			margin-inline-start: calc(
+				var(--wp--style--root--padding-left, 0px) * -1 +
+					var(--cb-margin-left-tablet, var(--cb-margin-left, 0px))
+			) !important;
+			margin-inline-end: calc(
+				var(--wp--style--root--padding-right, 0px) * -1 +
+					var(--cb-margin-right-tablet, var(--cb-margin-right, 0px))
+			) !important;
+		}
+	}
+}
+
+@mixin croco-blocks-alignfull-margins-desktop {
+	@at-root .has-global-padding > & {
+		&.alignfull {
+			margin-inline-start: calc(
+				var(--wp--style--root--padding-left, 0px) * -1 +
+					var(--cb-margin-left, 0px)
+			) !important;
+			margin-inline-end: calc(
+				var(--wp--style--root--padding-right, 0px) * -1 +
+					var(--cb-margin-right, 0px)
+			) !important;
+		}
+	}
 }

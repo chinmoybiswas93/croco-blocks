@@ -69,14 +69,9 @@ export function getCrocoInstanceCssSelector( blockName, attributes ) {
  * @param {Object} attributes
  * @return {boolean}
  */
-export function shouldUseExternalInstanceCss( attributes ) {
-	if ( ! attributes || typeof attributes !== 'object' ) {
-		return false;
-	}
-	if ( sanitizeCbInstanceKey( attributes.cbInstanceKey ) !== '' ) {
-		return true;
-	}
-	return anchorToIdSelector( attributes.anchor ) !== '';
+export function shouldUseExternalInstanceCss( _attributes ) {
+	// Match PHP: always inline CSS variables on the block root (no editor <style> sheet).
+	return false;
 }
 
 /**

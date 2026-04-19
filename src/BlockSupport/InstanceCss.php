@@ -1,6 +1,7 @@
 <?php
 /**
- * Instance-scoped CSS: emit one rule per block instance as a compact &lt;style&gt; during render.
+ * Instance-scoped CSS helpers (wrapper classes, legacy try_queue API).
+ * Declarations are always applied inline on the block root — no &lt;style&gt; in content.
  *
  * @package Croco_Blocks
  */
@@ -96,26 +97,6 @@ class InstanceCss {
 	}
 
 	/**
-	 * Whether we should emit declarations as an external rule (vs legacy inline style).
-	 *
-	 * @param array $attributes Block attributes.
-	 * @return bool
-	 */
-	public static function use_external_rule( $attributes ) {
-		if ( ! is_array( $attributes ) ) {
-			return false;
-		}
-		if ( '' !== self::sanitize_instance_key(
-			isset( $attributes['cbInstanceKey'] ) ? $attributes['cbInstanceKey'] : ''
-		) ) {
-			return true;
-		}
-		return '' !== self::anchor_selector(
-			isset( $attributes['anchor'] ) ? $attributes['anchor'] : ''
-		);
-	}
-
-	/**
 	 * Extra wrapper classes: cb-block, slug alias, cb-i-{key}.
 	 *
 	 * @param string $block_name Block name.
@@ -139,33 +120,15 @@ class InstanceCss {
 	}
 
 	/**
-	 * Instance CSS for a block: return true when the caller should omit inline style on the wrapper.
+	 * Legacy hook: previously echoed a &lt;style&gt; rule for large declaration strings.
+	 * Always false so callers keep variables on the block’s inline style (no extra DOM nodes).
 	 *
-	 * @param string $block_name   Block name.
-	 * @param array  $attributes   Attributes.
-	 * @param string $declarations Full declaration string.
-	 * @return bool True if inline style should be omitted on the rendered element.
+	 * @param string $block_name   Unused; kept for call-site compatibility.
+	 * @param array  $attributes   Unused.
+	 * @param string $declarations Unused.
+	 * @return bool Always false.
 	 */
 	public static function try_queue( $block_name, $attributes, $declarations ) {
-		$declarations = trim( (string) $declarations );
-		if ( '' === $declarations ) {
-			return false;
-		}
-		if ( ! self::use_external_rule( $attributes ) ) {
-			return false;
-		}
-		$sel = self::selector( $block_name, $attributes );
-		if ( '' === $sel ) {
-			return false;
-		}
-
-		$editor_context = is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST );
-
-		if ( ! $editor_context ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe selector; declarations from escaped builders.
-			echo "\n" . '<style class="croco-blocks-instance-css">' . $sel . '{' . $declarations . '}</style>' . "\n";
-		}
-
-		return true;
+		return false;
 	}
 }
