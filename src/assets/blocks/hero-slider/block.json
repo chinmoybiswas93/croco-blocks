@@ -277,6 +277,9 @@
 		"buttonStyle": {
 			"type": "string",
 			"default": "filled"
+		},
+		"style": {
+			"type": "object"
 		}
 	},
 	"supports": {

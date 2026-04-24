@@ -9,6 +9,7 @@ import {
 	getBorderCssVarsForEditor,
 	getSpacingCssVarsForEditor,
 } from '../../utils/spacingKeys';
+import { getCoreStyleInlineFromAttributes } from '../../utils/blockStyleInline';
 import { getAdvancedBackgroundStyle } from '../../utils/advancedBackground';
 import { useBlockEditContext, useBlockProps } from '@wordpress/block-editor';
 import {
@@ -151,6 +152,9 @@ registerBlockType( metadata.name, {
 			style: useExternalInstanceCss
 				? undefined
 				: {
+						...getCoreStyleInlineFromAttributes(
+							attributes.style
+						),
 						...getSpacingCssVarsForEditor( attributes ),
 						...getBorderCssVarsForEditor( attributes ),
 						...getAdvancedBackgroundStyle( attributes ),

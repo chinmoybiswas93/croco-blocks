@@ -218,6 +218,9 @@
 		"dropdownIndicatorSize": {
 			"type": "string",
 			"default": "12px"
+		},
+		"style": {
+			"type": "object"
 		}
 	},
 	"supports": {

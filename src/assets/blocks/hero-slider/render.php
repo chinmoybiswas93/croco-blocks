@@ -11,6 +11,7 @@
 
 use CrocoBlocks\BlockSupport\HeroSliderStyleDeclarations;
 use CrocoBlocks\BlockSupport\InstanceCss;
+use CrocoBlocks\BlockSupport\SpacingCss;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -52,13 +53,17 @@ if ( $queued ) {
 	$style_value = $decl;
 }
 
+$style_value = SpacingCss::append_core_style_attribute_to_inline( $style_value, $attributes );
+
 $inst_classes = InstanceCss::wrapper_class_string( 'croco-blocks/hero-slider', $attributes );
 
+$wrapper_class = trim( 'cb-hero-slider cb-hero-slider--height-' . esc_attr( $height_mode ) . ( $inst_classes ? ' ' . $inst_classes : '' ) );
+$wrapper_class .= SpacingCss::classnames_suffix_from_core_style_attribute( $attributes );
 $wrapper_extra_attributes = array(
-	'class' => trim( 'cb-hero-slider cb-hero-slider--height-' . esc_attr( $height_mode ) . ( $inst_classes ? ' ' . $inst_classes : '' ) ),
+	'class' => trim( $wrapper_class ),
 );
 
-if ( $style_value ) {
+if ( '' !== $style_value ) {
 	$wrapper_extra_attributes['style'] = $style_value;
 }
 

@@ -1,4 +1,4 @@
-@import '../../../scss/shared/unit-select-shared';
+@use '../../../scss/shared/unit-select-shared' as *;
 
 .cb-responsive-unit-control {
 	display: flex;

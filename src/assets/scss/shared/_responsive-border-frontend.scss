@@ -1,10 +1,7 @@
 /**
  * Advanced tab border: --cb-border-* and --cb-border-hover-* custom properties.
- * Breakpoints match _responsive-spacing-frontend.scss.
+ * Breakpoints ($cb-spacing-bp-*) live in _responsive-spacing-frontend.scss — load that module in the same entry stylesheet before using these mixins.
  */
-
-$cb-spacing-bp-tablet: 782px !default;
-$cb-spacing-bp-desktop: 960px !default;
 
 @mixin croco-blocks-border-widths-mobile {
 	border-top-width: var(

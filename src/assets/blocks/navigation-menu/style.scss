@@ -5,6 +5,9 @@
  * dropdowns on hover/focus of their parent menu item.
  */
 
+@use '../../scss/shared/responsive-spacing-frontend' as *;
+@use '../../scss/shared/responsive-border-frontend' as *;
+
 nav.wp-block-croco-blocks-navigation-menu {
 	display: block;
 }
@@ -669,9 +672,6 @@ nav.wp-block-croco-blocks-navigation-menu {
 		}
 	}
 }
-
-@import '../../scss/shared/responsive-spacing-frontend';
-@import '../../scss/shared/responsive-border-frontend';
 
 // Use .wp-block-* only (not nav) so Advanced spacing applies on the real block
 // root. Exclude the editor-only wrapper around ServerSideRender to avoid doubling.

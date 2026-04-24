@@ -1,5 +1,5 @@
-@import '../../scss/shared/responsive-spacing-frontend';
-@import '../../scss/shared/responsive-border-frontend';
+@use '../../scss/shared/responsive-spacing-frontend' as *;
+@use '../../scss/shared/responsive-border-frontend' as *;
 
 .cb-hero-slider-editor {
 	display: flex;

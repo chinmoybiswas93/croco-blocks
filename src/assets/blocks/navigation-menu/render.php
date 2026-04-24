@@ -11,6 +11,7 @@
 
 use CrocoBlocks\BlockSupport\InstanceCss;
 use CrocoBlocks\BlockSupport\NavigationMenuStyleDeclarations;
+use CrocoBlocks\BlockSupport\SpacingCss;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -55,6 +56,8 @@ if ( $queued ) {
 	$style = $decl;
 }
 
+$style = SpacingCss::append_core_style_attribute_to_inline( $style, $attributes );
+
 $inst_classes = InstanceCss::wrapper_class_string( 'croco-blocks/navigation-menu', $attributes );
 
 $nav_classes = 'cb-navigation cb-navigation--' . esc_attr( $orientation ) . ' cb-navigation--submenu-align-' . esc_attr( $submenu_alignment );
@@ -71,8 +74,10 @@ if ( $inst_classes ) {
 	$nav_classes .= ' ' . $inst_classes;
 }
 
+$nav_classes .= SpacingCss::classnames_suffix_from_core_style_attribute( $attributes );
+
 $wrapper_attrs = array(
-	'class' => $nav_classes,
+	'class' => trim( $nav_classes ),
 );
 
 if ( '' !== $style ) {

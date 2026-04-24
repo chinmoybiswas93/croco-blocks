@@ -3,8 +3,8 @@
  * Scoped to block-editor context so these rules do not run on the frontend.
  */
 
-@import '../../scss/shared/responsive-spacing-frontend';
-@import '../../scss/shared/responsive-border-frontend';
+@use '../../scss/shared/responsive-spacing-frontend' as *;
+@use '../../scss/shared/responsive-border-frontend' as *;
 
 .block-editor-page .wp-block-croco-blocks-navigation-menu,
 .edit-site-block-editor .wp-block-croco-blocks-navigation-menu {

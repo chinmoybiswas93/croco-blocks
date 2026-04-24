@@ -122,7 +122,16 @@ class SpacingCss {
 				}
 
 				foreach ( $sides as $side ) {
-					$key        = $attr_prefix . $side . $key_suffix;
+					$key = $attr_prefix . $side . $key_suffix;
+					/*
+					 * Margin: only emit sides the user set. Filling unset sides with 0 would set
+					 * --cb-margin-top etc. to 0px, so margin-block-start wins over parent layout
+					 * block spacing (core uses > * + * { margin-block-start: gap } on flow layouts).
+					 * Padding still uses 0 for unset sides so “one side only” behaves as a box.
+					 */
+					if ( 'margin' === $mode_key && ! self::attr_has_value( $attributes, $key ) ) {
+						continue;
+					}
 					$side_lower = strtolower( $side );
 					$var_name   = '--cb-' . $css_name . '-' . $side_lower . $bp['css_suffix'];
 					$val        = self::attr_has_value( $attributes, $key )
@@ -397,5 +406,67 @@ class SpacingCss {
 			return '';
 		}
 		return 'background-color:' . esc_attr( $safe ) . ';';
+	}
+
+	/**
+	 * Inline CSS from the core block `style` attribute (spacing, dimensions, border, typography in style object).
+	 *
+	 * Used when `supports.spacing` is false so the default Dimensions inspector is not mounted, while nested
+	 * layout / theme.json / patterns can still persist `attributes.style` and have it render like core blocks.
+	 *
+	 * @param array $attributes Block attributes.
+	 * @return string CSS declarations (no wrapping attribute), or empty string.
+	 */
+	public static function inline_css_from_core_style_attribute( array $attributes ) {
+		if ( empty( $attributes['style'] ) || ! is_array( $attributes['style'] ) ) {
+			return '';
+		}
+		if ( ! function_exists( 'wp_style_engine_get_styles' ) ) {
+			return '';
+		}
+		$generated = wp_style_engine_get_styles( $attributes['style'] );
+		if ( empty( $generated['css'] ) ) {
+			return '';
+		}
+		return trim( rtrim( (string) $generated['css'], ';' ) );
+	}
+
+	/**
+	 * Extra class names produced by the style engine for the block `style` attribute (e.g. preset-based utilities).
+	 *
+	 * @param array $attributes Block attributes.
+	 * @return string Leading space + classes, or empty string.
+	 */
+	public static function classnames_suffix_from_core_style_attribute( array $attributes ) {
+		if ( empty( $attributes['style'] ) || ! is_array( $attributes['style'] ) ) {
+			return '';
+		}
+		if ( ! function_exists( 'wp_style_engine_get_styles' ) ) {
+			return '';
+		}
+		$generated = wp_style_engine_get_styles( $attributes['style'] );
+		if ( empty( $generated['classnames'] ) ) {
+			return '';
+		}
+		return ' ' . trim( (string) $generated['classnames'] );
+	}
+
+	/**
+	 * Merge plugin inline style fragments with core `style` attribute output.
+	 *
+	 * @param string $existing Existing style="" fragment (may be empty).
+	 * @param array  $attributes Block attributes.
+	 * @return string
+	 */
+	public static function append_core_style_attribute_to_inline( $existing, array $attributes ) {
+		$extra = self::inline_css_from_core_style_attribute( $attributes );
+		if ( '' === $extra ) {
+			return is_string( $existing ) ? $existing : '';
+		}
+		$existing = is_string( $existing ) ? trim( rtrim( trim( $existing ), ';' ) ) : '';
+		if ( '' === $existing ) {
+			return $extra . ';';
+		}
+		return $existing . ';' . $extra . ';';
 	}
 }

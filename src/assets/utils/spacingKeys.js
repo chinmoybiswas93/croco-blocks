@@ -119,11 +119,14 @@ export function parseSpacingValue( raw ) {
  * @param {string} num
  * @param {string} unit
  * @param {'padding'|'margin'|'border'|'borderHover'|'borderRadius'|'borderRadiusHover'|undefined} mode Padding/border widths cannot be negative; margin can.
- * @return {string} Never empty — blanks become 0 with unit (consistent CSS vars).
+ * @return {string} For margin, empty input ⇒ '' (unset). Padding/border: blanks become 0 with unit.
  */
 export function formatSpacingValue( num, unit, mode ) {
 	const u = unit || 'px';
 	if ( num === undefined || num === null || String( num ).trim() === '' ) {
+		if ( mode === 'margin' ) {
+			return '';
+		}
 		return `0${ u }`;
 	}
 	let n = String( num ).trim();
@@ -191,6 +194,10 @@ export function getSpacingCssVarsForEditor( attributes ) {
 					String( raw ).trim() !== ''
 						? String( raw ).trim()
 						: '';
+				// Match SpacingCss.php: omit unset margin sides so parent block gap can apply.
+				if ( name === 'margin' && trimmed === '' ) {
+					continue;
+				}
 				const { num } = parseSpacingValue(
 					trimmed || `0${ unit }`
 				);

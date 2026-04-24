@@ -1,3 +1,6 @@
+@use '../../scss/shared/responsive-spacing-frontend' as *;
+@use '../../scss/shared/responsive-border-frontend' as *;
+
 .cb-hero-slider {
 	position: relative;
 	overflow: hidden;
@@ -419,9 +422,6 @@
 		);
 	}
 }
-
-@import '../../scss/shared/responsive-spacing-frontend';
-@import '../../scss/shared/responsive-border-frontend';
 
 // Front end + SSR preview: one root with spacing. Editor wraps SSR in an extra
 // div.croco-blocks-ssr-editor-root — exclude it so padding/margin are not doubled.

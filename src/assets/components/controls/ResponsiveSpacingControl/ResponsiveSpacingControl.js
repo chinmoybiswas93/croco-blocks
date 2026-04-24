@@ -78,7 +78,10 @@ export const ResponsiveSpacingControl = ( {
 				const key = getSpacingAttrKey( mode, side, d );
 				const raw = attributes[ key ];
 				if ( raw === undefined || raw === null || String( raw ).trim() === '' ) {
-					patch[ key ] = formatSpacingValue( '0', newUnit, mode );
+					patch[ key ] =
+						mode === 'margin'
+							? ''
+							: formatSpacingValue( '0', newUnit, mode );
 					continue;
 				}
 				const { num } = parseSpacingValue( raw );
@@ -115,7 +118,8 @@ export const ResponsiveSpacingControl = ( {
 		const raw = linked ? getValueForSide( 'Top' ) : getValueForSide( side );
 		const { num } = parseSpacingValue( raw );
 		if ( num === '' ) {
-			return '0';
+			/* Margin: show blank so “unset” is clear; padding/border show 0 as default. */
+			return mode === 'margin' ? '' : '0';
 		}
 		if (
 			mode === 'padding' ||
@@ -221,6 +225,14 @@ export const ResponsiveSpacingControl = ( {
 				) ) }
 				<span className="cb-responsive-spacing__label-spacer" />
 			</div>
+			{ mode === 'margin' && (
+				<p className="components-base-control__help cb-responsive-spacing__help-margin">
+					{ __(
+						'Empty = parent block spacing only. In flex or grid groups, gap and these margins combine; in default stack layout, a value here sets that side’s margin instead of an empty field.',
+						'croco-blocks'
+					) }
+				</p>
+			) }
 		</div>
 	);
 };
